@@ -116,9 +116,7 @@ module.exports = {
 
             selection.forEach(async element => {
                 try {
-                    CreateRegearEventIdFunc(element)
-                    
-                    pushData(element)
+                    await CreateRegearEventIdFunc(element)
                 }
                 catch (error) {
                     if (error.name === 'SequelizeUniqueConstraintError') {
@@ -127,6 +125,7 @@ module.exports = {
                         await i.followUp({ content: `發生未知錯誤、請找管理員。`, ephemeral: true })
                     }
                 }
+                await pushData(element)
             });
         });
     },
