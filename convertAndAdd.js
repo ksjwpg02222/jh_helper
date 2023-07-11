@@ -1,4 +1,3 @@
-const fs = require("fs");
 const AsyncLock = require('async-lock');
 const fetch = require("node-fetch");
 
@@ -44,10 +43,6 @@ const nameParser = (data, dict, isMount) => {
 }
 
 module.exports = async (eventId) => {
-    if (fs.existsSync("./data.json")) {
-        let file = JSON.parse(fs.readFileSync("./data.json"));
-        if (file.includes(eventId)) return "該紀錄已存在";
-    }
 
     let res = [await fetch(APIbase[0] + eventId), await fetch(APIbase[1] + eventId)].filter(i => i.status === 200)[0];
     let data = await res.json();
@@ -86,12 +81,4 @@ module.exports = async (eventId) => {
             "body": JSON.stringify(result)
         });
     });
-
-
-
-    if (!fs.existsSync("./data.json")) fs.writeFileSync("./data.json", "[]");
-
-    let file = JSON.parse(fs.readFileSync("./data.json"));
-    file.push(eventId);
-    fs.writeFileSync("./data.json", JSON.stringify(file, null, "\t"));
 }

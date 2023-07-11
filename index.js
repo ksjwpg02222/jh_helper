@@ -3,22 +3,10 @@ const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 const logger = require('./logger.js');
-const {Sequelize , } = require('sequelize');
-
+const { RegearEventIds } = require("./sql/table/regearEventIds.js")
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-const sequelize = new Sequelize('database', 'user', 'password', {
-	host: 'localhost',
-	dialect: 'sqlite',
-	logging: false,
-	// SQLite only
-	storage: 'database.sqlite',
-});
 
-const User = sequelize.define('User', {
-	username: DataTypes.STRING,
-	birthday: DataTypes.DATE,
-  });
 
 client.commands = new Collection();
 const foldersPath = path.join(__dirname, 'commands');
@@ -39,7 +27,7 @@ for (const folder of commandFolders) {
 }
 
 client.once(Events.ClientReady, () => {
-	User.sync
+	RegearEventIds.sync()
 	logger.info('Ready!');
 });
 

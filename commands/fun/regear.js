@@ -1,10 +1,7 @@
 const { SlashCommandBuilder, StringSelectMenuBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuOptionBuilder, ComponentType } = require('discord.js');
 const { default: axios } = require("axios");
 const pushData = require("../../convertAndAdd.js")
-<<<<<<< HEAD
-
-=======
->>>>>>> 0197e80 (sql)
+const { CreateRegearEventIdFunc } = require('../../sql/table/regearEventIds.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -118,9 +115,17 @@ module.exports = {
             await i.reply({ embeds: [exampleEmbed], ephemeral: true });
 
             selection.forEach(async element => {
-                const msg = await pushData(element)
-                if (msg) {
-                    await i.followUp({ content: `https://albiononline.com/killboard/kill/${element}?server=live_sgp ${msg}`, ephemeral: true })
+                try {
+                    await CreateRegearEventIdFunc(inGameName)
+
+                    await pushData(element)
+                }
+                catch (error) {
+                    if (error.name === 'SequelizeUniqueConstraintError') {
+                        await i.followUp({ content: `https://albiononline.com/killboard/kill/${element}?server=live_sgp 補裝紀錄已存在`, ephemeral: true })
+                    } else {
+                        await i.followUp({ content: `發生未知錯誤、請找管理員。`, ephemeral: true })
+                    }
                 }
             });
         });
