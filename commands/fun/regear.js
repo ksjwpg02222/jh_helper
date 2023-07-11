@@ -115,11 +115,20 @@ module.exports = {
             await i.reply({ embeds: [exampleEmbed], ephemeral: true });
 
             for (let i = 0; i < selection.length; i++) {
-                const b = await CreateRegearEventIdFunc(selection[i])
-                console.log(b)
+                try {
+                    await CreateRegearEventIdFunc(selection[i])
 
-                await pushData(selection[i])
-
+                    await pushData(selection[i])
+                    continue
+                }
+                catch (error) {
+                    if (error.name === 'SequelizeUniqueConstraintError') {
+                        await i.followUp({ content: `https://albiononline.com/killboard/kill/${selection[i]}?server=live_sgp 補裝紀錄已存在`, ephemeral: true })
+                    } else {
+                        await i.followUp({ content: `發生未知錯誤、請找管理員。`, ephemeral: true })
+                    }
+                    continue
+                }
             }
 
         });
