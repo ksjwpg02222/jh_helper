@@ -116,9 +116,9 @@ module.exports = {
 
             selection.forEach(async element => {
                 try {
-                    await CreateRegearEventIdFunc(element)
-
-                    await pushData(element)
+                    CreateRegearEventIdFunc(element)
+                    
+                    pushData(element)
                 }
                 catch (error) {
                     if (error.name === 'SequelizeUniqueConstraintError') {
