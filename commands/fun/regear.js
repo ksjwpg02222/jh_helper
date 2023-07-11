@@ -1,7 +1,10 @@
 const { SlashCommandBuilder, StringSelectMenuBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuOptionBuilder, ComponentType } = require('discord.js');
 const { default: axios } = require("axios");
 const pushData = require("../../convertAndAdd.js")
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0197e80 (sql)
 
 module.exports = {
     data: new SlashCommandBuilder()
