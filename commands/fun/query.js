@@ -36,45 +36,38 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true });
 
         const inGameName = interaction.options.getString('name');
-        const date = new Date()
-        console.log(`${inGameName}查詢了公會資料`, date.toLocaleString())
         const box = await getData(boxSpreadSheetsId, boxSheetId)
         const boxTarget = box.find(r => r[0] === inGameName)
 
         const result = await getData(spreadSheetsId, sheetId)
         const target = result.find(r => r[0] === inGameName)
 
-        try {
-            if (boxTarget) {
-                const exampleEmbed = new EmbedBuilder()
-                    .setColor(0x0099FF)
-                    .setTitle(boxTarget[0] || '無資料')
-                    .setURL('https://docs.google.com/spreadsheets/d/1-E6eQcZe-xf0IYXusb5Cb0MJ4BCYViAqy5oRN31VMiM/edit#gid=733040667')
-                    .setAuthor({ name: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' })
-                    .setDescription('工會內CTA次數、繳稅、退稅、補裝資料')
-                    .setThumbnail('https://i.imgur.com/5IO5kPT.png')
-                    .addFields(
-                        { name: '本周應繳金額', value: target[5] || '無資料', inline: true },
-                        { name: '是否已繳納', value: target[6] || '無資料', inline: true },
-                        { name: '\u200B', value: '\u200B' }
-                    )
-                    .addFields(
-                        { name: 'CTA出席次數', value: boxTarget[1] || '無資料', inline: true },
-                        { name: '可退稅金額', value: boxTarget[4] || '無資料', inline: true },
-                        { name: '補裝箱編號', value: boxTarget[5] || '無資料', inline: true }
-                    )
-                    .setTimestamp()
-                    .setImage('https://i.imgur.com/3o59qVr.png')
-                    .setFooter({ text: '有問題請私訊幹部.   Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' });
+        if (boxTarget) {
+            const exampleEmbed = new EmbedBuilder()
+                .setColor(0x0099FF)
+                .setTitle(boxTarget[0] || '無資料')
+                .setURL('https://docs.google.com/spreadsheets/d/1-E6eQcZe-xf0IYXusb5Cb0MJ4BCYViAqy5oRN31VMiM/edit#gid=733040667')
+                .setAuthor({ name: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' })
+                .setDescription('工會內CTA次數、繳稅、退稅、補裝資料')
+                .setThumbnail('https://i.imgur.com/5IO5kPT.png')
+                .addFields(
+                    { name: '本周應繳金額', value: target[5] || '無資料', inline: true },
+                    { name: '是否已繳納', value: target[6] || '無資料', inline: true },
+                    { name: '\u200B', value: '\u200B' }
+                )
+                .addFields(
+                    { name: 'CTA出席次數', value: boxTarget[1] || '無資料', inline: true },
+                    { name: '可退稅金額', value: boxTarget[4] || '無資料', inline: true },
+                    { name: '補裝箱編號', value: boxTarget[5] || '無資料', inline: true }
+                )
+                .setTimestamp()
+                .setImage('https://i.imgur.com/3o59qVr.png')
+                .setFooter({ text: '有問題請私訊幹部.   Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' });
 
 
-                await interaction.editReply({ embeds: [exampleEmbed], ephemeral: true });
-            } else {
-                await interaction.editReply({ content: `查無 ${inGameName} 的資料，請看看有無打錯遊戲名稱或直接詢問幹部。`, ephemeral: true });
-            }
-        } catch (error) {
-            console.error(error);
-            await interaction.deferReply({ content: `發生錯誤請稍後在試。`, ephemeral: true });
+            await interaction.editReply({ embeds: [exampleEmbed], ephemeral: true });
+        } else {
+            await interaction.editReply({ content: `查無 ${inGameName} 的資料，請看看有無打錯遊戲名稱或直接詢問幹部。`, ephemeral: true });
         }
 
         async function getData(spreadSheetsId, sheetId) {

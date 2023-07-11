@@ -2,6 +2,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
+const logger = require('./logger.js');
+
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -18,13 +20,13 @@ for (const folder of commandFolders) {
 		if ('data' in command && 'execute' in command) {
 			client.commands.set(command.data.name, command);
 		} else {
-			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+			logger.info(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 		}
 	}
 }
 
 client.once(Events.ClientReady, () => {
-	console.log('Ready!');
+	logger.info('Ready!');
 });
 
 client.on(Events.InteractionCreate, async interaction => {
@@ -35,9 +37,10 @@ client.on(Events.InteractionCreate, async interaction => {
 	if (!command) return;
 
 	try {
+		logger.info(`${interaction.member.displayName} used ${interaction.commandName} command.`)
 		await command.execute(interaction);
 	} catch (error) {
-		console.error(error);
+		logger.error(error);
 		if (interaction.replied || interaction.deferred) {
 			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
 		} else {

@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, StringSelectMenuBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuOptionBuilder, ComponentType } = require('discord.js');
 const { default: axios } = require("axios");
-// const pushData = require('../../convertAndAdd.js');
 
 
 module.exports = {
@@ -35,8 +34,6 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true });
 
         const inGameName = interaction.options.getString('name');
-        const date = new Date()
-        console.log(`${inGameName}申請補裝`, date.toLocaleString())
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
         const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Just Hold')
@@ -46,7 +43,7 @@ module.exports = {
             return
         }
 
-        const { data : deaths} = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/players/${player.Id}/deaths`)
+        const { data: deaths } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/players/${player.Id}/deaths`)
 
         const data = deaths.filter(death => new Date().getTime() - new Date(death.TimeStamp).getTime() < 172800000)
 

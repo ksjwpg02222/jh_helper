@@ -32,8 +32,6 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true });
 
         const inGameName = interaction.options.getString('name');
-        const date = new Date()
-        console.log(`${inGameName}查詢了死亡紀錄`, date.toLocaleString())
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
         const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Just Hold')
