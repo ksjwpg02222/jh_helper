@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 const sequelize = require("../connect.js")
 
-const RegearEventIds = sequelize.define('regearEventIds', {
+const RegearEventIds = sequelize.define('regear_event_ids', {
     eventId: {
         type: Sequelize.STRING,
         unique: true,
