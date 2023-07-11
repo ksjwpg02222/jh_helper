@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, StringSelectMenuBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuOptionBuilder, ComponentType } = require('discord.js');
 const { default: axios } = require("axios");
+const pushData = require("../../convertAndAdd.js")
 
 
 module.exports = {
