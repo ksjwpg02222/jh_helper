@@ -114,19 +114,21 @@ module.exports = {
             await interaction.deleteReply()
             await i.reply({ embeds: [exampleEmbed], ephemeral: true });
 
-            selection.forEach(async element => {
+            for (let i = 0; i < selection.length; i++) {
                 try {
-                    await CreateRegearEventIdFunc(element)
+                    await CreateRegearEventIdFunc(selection[i])
+
+                    await pushData(selection[i])
                 }
                 catch (error) {
                     if (error.name === 'SequelizeUniqueConstraintError') {
-                        await i.followUp({ content: `https://albiononline.com/killboard/kill/${element}?server=live_sgp 補裝紀錄已存在`, ephemeral: true })
+                        await i.followUp({ content: `https://albiononline.com/killboard/kill/${selection[i]}?server=live_sgp 補裝紀錄已存在`, ephemeral: true })
                     } else {
                         await i.followUp({ content: `發生未知錯誤、請找管理員。`, ephemeral: true })
                     }
                 }
-                await pushData(element)
-            });
+            }
+
         });
     },
 };
