@@ -116,7 +116,7 @@ module.exports = {
 
             selection.forEach(async element => {
                 try {
-                    await CreateRegearEventIdFunc(inGameName)
+                    await CreateRegearEventIdFunc(element)
 
                     await pushData(element)
                 }
