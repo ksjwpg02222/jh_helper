@@ -1,11 +1,10 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { GoogleSpreadsheet } = require('google-spreadsheet')
 const credentials = '../../credentials.json'
 const boxSpreadSheetsId = '1-E6eQcZe-xf0IYXusb5Cb0MJ4BCYViAqy5oRN31VMiM'
 const boxSheetId = '1687369622'
 const spreadSheetsId = '1f05Sf6W4Jcgm2vDKk9TdOB-OMV9CDLrjhawwLhE0vOw'
 const sheetId = '1948413126'
-const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()

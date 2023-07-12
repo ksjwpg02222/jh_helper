@@ -19,6 +19,6 @@
     "start": "node .",
     "lint": "eslint .",
     "dev": "node . | pino-pretty -i 5566,localhost -t 'yyyy-mm-dd HH:MM:ss'",
-    "commands": "node commands.js | pino-pretty -i 5566,localhost -t 'yyyy-mm-dd HH:MM:ss'"
+    "cmd": "node commands.js | pino-pretty -i 5566,localhost -t 'yyyy-mm-dd HH:MM:ss'"
   }
 }

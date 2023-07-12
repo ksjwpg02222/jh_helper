@@ -40,7 +40,7 @@ module.exports = {
         const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Just Hold')
 
         if (!player) {
-            await interaction.editReply({ content: '不是JH的還敢用！', ephemeral: true });
+            await interaction.editReply({ content: '輸入的查詢名稱並未是JH之成員。', ephemeral: true });
             return
         }
 

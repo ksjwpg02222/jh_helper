@@ -132,4 +132,5 @@ dist
 #自己搞
 credentials.json
 config.json
+*.sqlite
 
