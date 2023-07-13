@@ -45,6 +45,7 @@ client.on(Events.InteractionCreate, async interaction => {
 		await interaction.reply({ content: '尚無JH身分組，如果有的話請詢問管理員。', ephemeral: true });
 		return
 	}
+
 	try {
 
 		logger.info(`${interaction.member.displayName} used ${interaction.commandName} command.`)

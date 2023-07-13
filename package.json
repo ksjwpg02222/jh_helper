@@ -8,6 +8,7 @@
     "google-spreadsheet": "^3.3.0",
     "node-fetch": "^2.6.12",
     "pino": "^7.0.0-rc.9",
+    "pino-pretty": "^10.0.1",
     "sequelize": "^6.32.1",
     "sqlite3": "^5.1.6"
   },
