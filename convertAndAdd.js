@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 
 let lock = new AsyncLock({ domainReentrant: true });
 
-const appUrl = 'https://script.google.com/macros/s/AKfycbyj_oGeSQyszM_40_g18XcQjLA69eWREY_xTgJeWjSundJhbn3C6tpgnrCi6FmdRDzP8w/exec'
+const appUrl = 'https://script.google.com/macros/s/AKfycbwX8oIlvPmz6f-fRRt94FRKyzFfBfyNbAKE6qoSYPOlvYNvKChkcHYSh6ye3A-4Qm0xNw/exec'
 
 const APIbase = [
     "https://gameinfo-sgp.albiononline.com/api/gameinfo/events/",
@@ -42,7 +42,7 @@ const nameParser = (data, dict, isMount) => {
     else return `${T}${number.length ? "." + number : ""}${dict[id]}`;
 }
 
-module.exports = async (eventId) => {
+module.exports = async (eventId, isFighter) => {
 
     let res = [await fetch(APIbase[0] + eventId), await fetch(APIbase[1] + eventId)].filter(i => i.status === 200)[0];
     let data = await res.json();
@@ -71,7 +71,8 @@ module.exports = async (eventId) => {
         cape: nameParser(equipment["Cape"], dict),
         mount: nameParser(equipment["Mount"], dict, true),
         time: `${date}.${month}.${year} ${hour}:${minute}`,
-        eventId
+        eventId,
+        isFighter: isFighter ? '是' : '否'
     }
 
     await lock.acquire('key', async () => {

@@ -32,9 +32,13 @@ module.exports = {
 
     async execute(interaction) {
 
+
+
         await interaction.deferReply({ ephemeral: true });
 
         const inGameName = interaction.options.getString('name');
+
+        const isFighter = interaction.member._roles.some(role => role === '959422545088638987' || role === '1119473118650568734')
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
         const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Just Hold')
@@ -118,7 +122,7 @@ module.exports = {
                 try {
                     await CreateRegearEventIdFunc(selection[index])
 
-                    await pushData(selection[index])
+                    await pushData(selection[index], isFighter)
                 }
                 catch (error) {
                     if (error.name === 'SequelizeUniqueConstraintError') {
