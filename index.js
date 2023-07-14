@@ -44,10 +44,10 @@ client.on(Events.InteractionCreate, async interaction => {
 
 	if (!command) return;
 
-	// if (!interaction.member._roles.some(role => role === '937291899792928798')) {
-	// 	await interaction.reply({ content: '尚無JH身分組，如果有的話請詢問管理員。', ephemeral: true });
-	// 	return
-	// }
+	if (!interaction.member._roles.some(role => role === '937291899792928798')) {
+		await interaction.reply({ content: '尚無JH身分組，如果有的話請詢問管理員。', ephemeral: true });
+		return
+	}
 
 	try {
 
