@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, StringSelectMenuBuilder, TextInputBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuOptionBuilder, ComponentType } = require('discord.js');
+const { SlashCommandBuilder, StringSelectMenuBuilder, TextInputBuilder, ModalBuilder, TextInputStyle, EmbedBuilder, ActionRowBuilder, StringSelectMenuOptionBuilder, ComponentType } = require('discord.js');
 const { default: axios } = require("axios");
 const pushData = require("../../convertAndAdd.js")
 const { CreateRegearEventIdFunc } = require('../../sql/table/regearEventIds.js');
