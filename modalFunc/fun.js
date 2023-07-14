@@ -46,9 +46,9 @@ module.exports = async (interaction) => {
             }
             catch (error) {
                 if (error.name === 'SequelizeUniqueConstraintError') {
-                    await i.followUp({ content: `https://albiononline.com/killboard/kill/${fields[index].customId}?server=live_sgp 補裝紀錄已存在`, ephemeral: true })
+                    await interaction.followUp({ content: `https://albiononline.com/killboard/kill/${fields[index].customId}?server=live_sgp 補裝紀錄已存在`, ephemeral: true })
                 } else {
-                    await i.followUp({ content: `發生未知錯誤、請找管理員。`, ephemeral: true })
+                    await interaction.followUp({ content: `發生未知錯誤、請找管理員。`, ephemeral: true })
                 }
             }
         }
