@@ -97,7 +97,7 @@ module.exports = {
                     .map((item, index) => (
                         new TextInputBuilder()
                             .setCustomId(`${item.EventId}`)
-                            .setLabel(`${index + 1}. [${item.Killer.GuildName}]${item.Killer.Name} 殺了 [${item.Victim.GuildName}]${item.Victim.Name}`)
+                            .setLabel(`${index + 1}.  被 [${item.Killer.GuildName}]${item.Killer.Name} 殺了`)
                             .setStyle(TextInputStyle.Short)
                             .setPlaceholder('請輸入備註(可不填)')
                             .setRequired(false)
