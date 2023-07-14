@@ -32,13 +32,9 @@ module.exports = {
 
     async execute(interaction) {
 
-
-
         await interaction.deferReply({ ephemeral: true });
 
         const inGameName = interaction.options.getString('name');
-
-        const isFighter = interaction.member._roles.some(role => role === '959422545088638987' || role === '1119473118650568734')
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
         const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Just Hold')
@@ -93,45 +89,29 @@ module.exports = {
 
         const collector = response.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 3_600_000 });
 
-
         collector.on('collect', async i => {
             const selection = i.values
 
-
-            const regearInfo =
+            const inputs =
                 data.filter(d => selection.find(select => +d.EventId === +select))
-                    .map((item, index) => ({
-                        name: `${index + 1}. [${item.Killer.GuildName}]${item.Killer.Name} 殺了 [${item.Victim.GuildName}]${item.Victim.Name}`,
-                        value: `https://albiononline.com/killboard/kill/${item.EventId}?server=live_sgp`
-                    }))
+                    .map((item, index) => (
+                        new TextInputBuilder()
+                            .setCustomId(`${item.EventId}`)
+                            .setLabel(`${index + 1}. [${item.Killer.GuildName}]${item.Killer.Name} 殺了 [${item.Victim.GuildName}]${item.Victim.Name}`)
+                            .setStyle(TextInputStyle.Short)
+                            .setPlaceholder('請輸入備註(可不填)')
+                            .setRequired(false)
+                    ))
 
-            const exampleEmbed = new EmbedBuilder()
-                .setColor(0x0099FF)
-                .setTitle(inGameName || '無資料')
-                .setAuthor({ name: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' })
-                .setDescription('已送出補裝資料')
-                .setThumbnail('https://i.imgur.com/5IO5kPT.png')
-                .addFields(regearInfo)
-                .setTimestamp()
-                .setFooter({ text: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' });
+            const modal = new ModalBuilder()
+                .setCustomId('regear')
+                .setTitle('補裝事項備註');
 
-            await interaction.deleteReply()
-            await i.reply({ embeds: [exampleEmbed], ephemeral: true });
+            const actionRows = inputs.map(input => new ActionRowBuilder().addComponents(input))
 
-            for (let index = 0; index < selection.length; index++) {
-                try {
-                    await CreateRegearEventIdFunc(selection[index])
+            modal.addComponents(actionRows);
 
-                    await pushData(selection[index], isFighter)
-                }
-                catch (error) {
-                    if (error.name === 'SequelizeUniqueConstraintError') {
-                        await i.followUp({ content: `https://albiononline.com/killboard/kill/${selection[index]}?server=live_sgp 補裝紀錄已存在`, ephemeral: true })
-                    } else {
-                        await i.followUp({ content: `發生未知錯誤、請找管理員。`, ephemeral: true })
-                    }
-                }
-            }
+            await i.showModal(modal);
 
         });
     },

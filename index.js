@@ -5,6 +5,7 @@ const { token } = require('./config.json');
 const logger = require('./logger.js');
 const { RegearEventIds } = require("./sql/table/regearEventIds.js")
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const modalFunc = require("./modalFunc/fun.js")
 
 
 
@@ -33,18 +34,20 @@ client.once(Events.ClientReady, () => {
 
 
 client.on(Events.InteractionCreate, async interaction => {
+
+
+	if (interaction.isModalSubmit) { modalFunc(interaction) }
+
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = client.commands.get(interaction.commandName);
 
 	if (!command) return;
 
-
-
-	if (!interaction.member._roles.some(role => role === '937291899792928798')) {
-		await interaction.reply({ content: '尚無JH身分組，如果有的話請詢問管理員。', ephemeral: true });
-		return
-	}
+	// if (!interaction.member._roles.some(role => role === '937291899792928798')) {
+	// 	await interaction.reply({ content: '尚無JH身分組，如果有的話請詢問管理員。', ephemeral: true });
+	// 	return
+	// }
 
 	try {
 

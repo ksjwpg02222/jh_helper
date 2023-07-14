@@ -42,7 +42,7 @@ const nameParser = (data, dict, isMount) => {
     else return `${T}${number.length ? "." + number : ""}${dict[id]}`;
 }
 
-module.exports = async (eventId, isFighter) => {
+module.exports = async (eventId, remarkJsonObj, isFighter) => {
 
     let res = [await fetch(APIbase[0] + eventId), await fetch(APIbase[1] + eventId)].filter(i => i.status === 200)[0];
     let data = await res.json();
@@ -72,7 +72,8 @@ module.exports = async (eventId, isFighter) => {
         mount: nameParser(equipment["Mount"], dict, true),
         time: `${date}.${month}.${year} ${hour}:${minute}`,
         eventId,
-        isFighter: isFighter ? '是' : '否'
+        isFighter: isFighter ? '是' : '否',
+        remark : remarkJsonObj[eventId] || '無'
     }
 
     await lock.acquire('key', async () => {
