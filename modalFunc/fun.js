@@ -6,6 +6,8 @@ module.exports = async (interaction) => {
 
     if (interaction.customId == 'regear') {
 
+        await interaction.deferReply({ ephemeral: true });
+
         const isFighter = interaction.member._roles.some(role => role === '959422545088638987' || role === '1119473118650568734')
         const fields = interaction.fields.fields.map(field => field)
 
@@ -34,9 +36,8 @@ module.exports = async (interaction) => {
             .setTimestamp()
             .setFooter({ text: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' });
 
-
-        await interaction.reply({ embeds: [exampleEmbed], ephemeral: true });
-
+        await interaction.editReply({ embeds: [exampleEmbed], ephemeral: true });
+        
         for (let index = 0; index < fields.length; index++) {
             try {
                 await CreateRegearEventIdFunc(fields[index].customId)
