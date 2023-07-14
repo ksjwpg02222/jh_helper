@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 
 let lock = new AsyncLock({ domainReentrant: true });
 
-const appUrl = 'https://script.google.com/macros/s/AKfycbwX8oIlvPmz6f-fRRt94FRKyzFfBfyNbAKE6qoSYPOlvYNvKChkcHYSh6ye3A-4Qm0xNw/exec'
+const appUrl = 'https://script.google.com/macros/s/AKfycbzV-Uz9A7asQ-hMKDdVG8_TZtm335CvbVvWny_crOpiK2EBBbsXRuBLrN96whSK0AZh2Q/exec'
 
 const APIbase = [
     "https://gameinfo-sgp.albiononline.com/api/gameinfo/events/",
