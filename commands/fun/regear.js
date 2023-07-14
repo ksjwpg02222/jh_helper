@@ -111,9 +111,7 @@ module.exports = {
 
             modal.addComponents(actionRows);
 
-            await interaction.deleteReply()
             await i.showModal(modal);
-            
 
         });
     },
