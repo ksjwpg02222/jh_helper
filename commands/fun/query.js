@@ -53,6 +53,10 @@ module.exports = {
             target = []
         }
 
+        function getArrayValue(array, index) {
+            return array?.length > index ? array[index] : '無資料'
+        }
+
         if (boxTarget.length || target.length) {
             const exampleEmbed = new EmbedBuilder()
                 .setColor(0x0099FF)
@@ -62,14 +66,14 @@ module.exports = {
                 .setDescription('工會內CTA次數、繳稅、退稅、補裝資料')
                 .setThumbnail('https://i.imgur.com/5IO5kPT.png')
                 .addFields(
-                    { name: '本周應繳金額', value: target[5] || '無資料', inline: true },
-                    { name: '是否已繳納', value: target[6] || '無資料', inline: true },
+                    { name: '本周應繳金額', value: getArrayValue(target, 5) || '無資料', inline: true },
+                    { name: '是否已繳納', value: getArrayValue(target, 6) || '無資料', inline: true },
                     { name: '\u200B', value: '\u200B' }
                 )
                 .addFields(
-                    { name: 'CTA出席次數', value: boxTarget[1] || '無資料', inline: true },
-                    { name: '可退稅金額', value: boxTarget[4] || '無資料', inline: true },
-                    { name: '補裝箱編號', value: boxTarget[5] || '無資料', inline: true }
+                    { name: 'CTA出席次數', value: getArrayValue(boxTarget, 1) || '無資料', inline: true },
+                    { name: '可退稅金額', value: getArrayValue(boxTarget, 4) || '無資料', inline: true },
+                    { name: '補裝箱編號', value: getArrayValue(boxTarget, 5) || '無資料', inline: true }
                 )
                 .setTimestamp()
                 .setImage('https://i.imgur.com/3o59qVr.png')
