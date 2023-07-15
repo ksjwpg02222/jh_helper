@@ -35,13 +35,25 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true });
 
         const inGameName = interaction.options.getString('name');
-        const box = await getData(boxSpreadSheetsId, boxSheetId)
-        const boxTarget = box.find(r => r[0] === inGameName)
 
-        const result = await getData(spreadSheetsId, sheetId)
-        const target = result.find(r => r[0] === inGameName)
+        let boxTarget
+        let target
 
-        if (boxTarget) {
+        try {
+            const box = await getData(boxSpreadSheetsId, boxSheetId)
+            boxTarget = box?.find(r => r[0] === inGameName)
+        } catch {
+            boxTarget = []
+        }
+
+        try {
+            const result = await getData(spreadSheetsId, sheetId)
+            target = result?.find(r => r[0] === inGameName)
+        } catch {
+            target = []
+        }
+
+        if (boxTarget.length || target.length) {
             const exampleEmbed = new EmbedBuilder()
                 .setColor(0x0099FF)
                 .setTitle(boxTarget[0] || '無資料')
