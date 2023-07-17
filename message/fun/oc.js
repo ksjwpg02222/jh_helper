@@ -16,8 +16,6 @@ module.exports = async (msg, attachments) => {
     response.awaitMessageComponent({ componentType: ComponentType.Button, time: 60_000 })
         .then(async interaction => {
 
-            interaction.guild.channels.cache.get('991183355045490698').send(`<@${interaction.user.id}> 已申請OC爆裝補裝。`)
-
             await interaction.deferReply({ ephemeral: true });
 
             const isFighter = interaction.member._roles.some(role => role === '959422545088638987' || role === '1119473118650568734')
@@ -252,14 +250,24 @@ module.exports = async (msg, attachments) => {
                                                     const json = itemSelected.reduce((prev, current) => {
                                                         const jsonObj = JSON.parse(current)
 
+                                                        let t = jsonObj.t
+
+                                                        if (jsonObj.t == '平9') {
+                                                            t = '平8.1'
+                                                        } else if (jsonObj.t === '平10') {
+                                                            t = '平8.2'
+                                                        } else if (jsonObj.t === '平11') {
+                                                            t = '平8.3'
+                                                        }
+
                                                         if (jsonObj.parts === '頭') {
-                                                            prev.head = `${jsonObj.t?.replace('平', 'T')}${jsonObj.name}`
+                                                            prev.head = `${t?.replace('平', 'T')}${jsonObj.name}`
                                                         } else if (jsonObj.parts === '身') {
-                                                            prev.armor = `${jsonObj.t?.replace('平', 'T')}${jsonObj.name}`
+                                                            prev.armor = `${t?.replace('平', 'T')}${jsonObj.name}`
                                                         } else if (jsonObj.parts === '腳') {
-                                                            prev.shoes = `${jsonObj.t?.replace('平', 'T')}${jsonObj.name}`
+                                                            prev.shoes = `${t?.replace('平', 'T')}${jsonObj.name}`
                                                         } else if (jsonObj.parts === '副手') {
-                                                            prev.offHand = `${jsonObj.t?.replace('平', 'T')}${jsonObj.name}`
+                                                            prev.offHand = `${t?.replace('平', 'T')}${jsonObj.name}`
                                                         } else if (jsonObj.parts === '武器') {
                                                             prev.weapon = `${jsonObj.t?.replace('平', 'T')}${jsonObj.name}`
                                                         }
@@ -267,9 +275,9 @@ module.exports = async (msg, attachments) => {
                                                     }, {})
 
                                                     fainaInteraction.reply({ content: 'OC爆裝補裝申請完成。', ephemeral: true })
-                                                    // fainaInteraction.guild.channels.cache.get('991183355045490698').send(attachments[0].url)
-                                                    // fainaInteraction.guild.channels.cache.get('991183355045490698').send(`<@${interaction.user.id}> 已申請OC爆裝補裝。`)
-                                                    // fainaInteraction.guild.channels.cache.get('991183355045490698').send(`備註 : ${fields[1].value || '無'} `)
+                                                    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(attachments[0].url)
+                                                    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`<@${interaction.user.id}> 已申請OC爆裝補裝。`)
+                                                    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`備註 : ${fields[1].value || '無'} `)
 
                                                     await ocAdd({ ...json, isFighter, remark: `${fields[1].value}_${attachments[0].url}`, name: fields[0].value })
 
