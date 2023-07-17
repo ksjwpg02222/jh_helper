@@ -134,5 +134,4 @@ credentials.json
 config.json
 *.sqlite
 commands/fun/test.js
-.env.*
 
