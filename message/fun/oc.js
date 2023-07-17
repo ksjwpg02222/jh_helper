@@ -269,7 +269,7 @@ module.exports = async (msg, attachments) => {
                                                     fainaInteraction.reply({ content: 'OC爆裝補裝申請完成。', ephemeral: true })
                                                     // fainaInteraction.guild.channels.cache.get('991183355045490698').send(attachments[0].url)
                                                     // fainaInteraction.guild.channels.cache.get('991183355045490698').send(`<@${interaction.user.id}> 已申請OC爆裝補裝。`)
-
+                                                    // fainaInteraction.guild.channels.cache.get('991183355045490698').send(`備註 : ${fields[1].value || '無'} `)
 
                                                     await ocAdd({ ...json, isFighter, remark: `${fields[1].value}_${attachments[0].url}`, name: fields[0].value })
 
