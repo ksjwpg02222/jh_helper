@@ -5,7 +5,7 @@ const sheetId = '10126847'
 const credentials = '../../credentials.json'
 const { GoogleSpreadsheet } = require('google-spreadsheet')
 
-const Item = sequelize.define('item', {
+const Items = sequelize.define('item', {
     name: {
         type: Sequelize.STRING,
         unique: true,
@@ -21,26 +21,20 @@ const Item = sequelize.define('item', {
     }
 });
 
-const CreateItem = async () => await Item.create({
-    name: 'eventId',
-    tpye: 'test'
-});
+const itemCount = async () => await Items.count();
 
-const itemCount = async () => await Item.count();
+const findByType = async (type) => await Items.findAll({ where: { type: type } })
 
-const findByType = async (type) => await Item.findAll({ where: { type: type } })
+const groupByArgs = async (args) => await Items.findAll({ group: args, attributes: [args] })
 
-const groupByArgs = async (args) => await Item.findAll({ group: args, attributes: [args] })
+const queryByPartsThenGroupByCategory = async (args) => await Items.findAll({ raw: true, group: 'category', where: { parts: args.parts }, attributes: ['category'] })
 
-const queryByPartsThenGroupByCategory = async (parts) => await Item.findAll({ raw: true, group: 'category', where: { parts: parts }, attributes: ['category'] })
-
-
-// const queryByTypeThenGroupByCategory = async (type) => await Item.findAll({ group: 'category', where: { type: type }, attributes: ['category'] })
+const queryByCategoryAndParts = async (args) => await Items.findAll({ where: { parts: args.parts, category: args.category }, attributes: ['name'] })
 
 const initData = async () => {
     const data = await getData()
     const jsonArray = data.map(d => ({ name: d[1], category: d[2], type: d[3], parts: d[4] }))
-    await Item.bulkCreate(jsonArray)
+    await Items.bulkCreate(jsonArray)
 }
 
 async function getData() {
@@ -57,4 +51,4 @@ async function getData() {
     return result;
 };
 
-module.exports = { Item, itemCount, CreateItem, initData, findByType, groupByArgs, queryByPartsThenGroupByCategory }
+module.exports = { Item: Items, itemCount,  initData, findByType, groupByArgs, queryByPartsThenGroupByCategory, queryByCategoryAndParts }

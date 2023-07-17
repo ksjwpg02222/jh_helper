@@ -1,6 +1,6 @@
 const { Events } = require('discord.js');
 const { RegearEventIds } = require("../sql/table/regearEventIds.js")
-const { Item, itemCount, initData } = require("../sql/table/item.js")
+const { Item, itemCount, initData } = require("../sql/table/items.js")
 const logger = require('../logger.js');
 
 module.exports = {

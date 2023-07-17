@@ -1,32 +1,24 @@
 const { Events } = require('discord.js');
 const logger = require('../logger.js');
-const buttonsFuns = require('../buttonFun/fun.js')
-const modalFunc = require("../modalFunc/fun.js")
-const selectFunc = require("../selectFun/fun.js")
+require('dotenv').config()
 
 
 module.exports = {
     name: Events.InteractionCreate,
     async execute(interaction) {
 
-        // if (!interaction.member._roles.some(role => role === '937291899792928798')) {
-        // 	await interaction.reply({ content: '尚無JH身分組，如果有的話請詢問管理員。', ephemeral: true });
-        // 	return
-        // }
-        if (interaction.isStringSelectMenu()) { selectFunc(interaction) }
-
-        if (interaction.isModalSubmit()) { modalFunc(interaction) }
-
-        if (interaction.isButton()) { buttonsFuns(interaction) }
+        if(process.env.MODE !== 'dev'){
+            if (!interaction.member._roles.some(role => role === '937291899792928798')) {
+                await interaction.reply({ content: '尚無JH身分組，如果有的話請詢問管理員。', ephemeral: true });
+                return
+            }
+        }
 
         if (!interaction.isChatInputCommand()) return;
 
         const command = interaction.client.commands.get(interaction.commandName);
 
         if (!command) return;
-
-
-
 
         try {
             logger.info(`${interaction.member.displayName} used ${interaction.commandName} command.`)
