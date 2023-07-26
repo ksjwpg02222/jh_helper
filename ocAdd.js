@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 
 let lock = new AsyncLock({ domainReentrant: true });
 
-const appUrl = 'https://script.google.com/macros/s/AKfycbwqkUUBKVMp4ZtS1Hn6D9ElMY1hfdLWoxxv9kG3wa--A8fhT_b2BOKFOMYxlIAfMJQ_mw/exec'
+const appUrl = 'https://script.google.com/macros/s/AKfycbw8AVM4-hdDgdzTGPCoRQ_L4hOjanZqCN2wDZLi1-kH7pflBXd9DbjCapgDzn8syZHlIg/exec'
 
 module.exports = async (jsonObj) => {
 
