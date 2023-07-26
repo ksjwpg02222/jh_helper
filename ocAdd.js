@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 
 let lock = new AsyncLock({ domainReentrant: true });
 
-const appUrl = 'https://script.google.com/macros/s/AKfycbyIUY096UOuZ42TbJzwffdli3QVS1yIhWKvFe-HrOBWJRpD_LeFZt3mn4ahfNsArhh7/exec'
+const appUrl = 'https://script.google.com/macros/s/AKfycbwbnvug30wcSeg6nGR3O9FN__PJHyrBmO3AxjL--FY7PozAc0lgAQzB75QnJLjZeTh-KQ/exec'
 
 module.exports = async (jsonObj) => {
 
@@ -26,7 +26,7 @@ module.exports = async (jsonObj) => {
         cape: jsonObj.cape || '',
         mount: jsonObj.mount || '',
         time: `${date}.${month}.${year} ${hour}:${minute}`,
-        eventId: 'OC爆裝',
+        eventId: jsonObj.eventId,
         isFighter: jsonObj.isFighter ? '是' : '否',
         remark: jsonObj.remark || '無'
     }
