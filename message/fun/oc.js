@@ -1,9 +1,12 @@
 const { TextInputStyle, StringSelectMenuBuilder, ButtonBuilder, ButtonStyle, ModalBuilder, TextInputBuilder, ActionRowBuilder, StringSelectMenuOptionBuilder, ComponentType } = require('discord.js');
 const { queryByPartsThenGroupByCategory, queryByCategoryAndParts } = require("../../sql/table/items.js")
-const ocAdd = require("../../ocAdd.js")
+const ocAdd = require("../../ocAdd.js");
+const logger = require('../../logger.js');
 
+const dataObj = {}
 module.exports = async (msg, attachments) => {
 
+    dataObj[msg.author.id] = { attachments: attachments[0].url }
     const button = new ActionRowBuilder();
     button.addComponents(
         new ButtonBuilder()
@@ -19,6 +22,8 @@ module.exports = async (msg, attachments) => {
             await interaction.deferReply({ ephemeral: true });
 
             const isFighter = interaction.member._roles.some(role => role === '959422545088638987' || role === '1119473118650568734')
+
+            dataObj[msg.author.id] = { ...dataObj[msg.author.id], isFighter }
 
             const data = ['頭', '身', '腳', '武器', '副手']
             const selectItem = data?.map((item) => (
@@ -48,17 +53,17 @@ module.exports = async (msg, attachments) => {
 
             const response = await interaction.editReply({
                 content: '請選擇爆裝部位 \n 如果含副手五件全爆的話請分兩次\n 下一個步驟沒辦法容納那麼多選擇框\n',
-                components: [row, button],
-                ephemeral: true
+                ephemeral: true,
+                components: [row, button]
+
             });
 
             const collector = await response.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 60_000 });
 
-            let selected
 
             collector.on('collect', i => {
                 i.deferUpdate();
-                selected = i.values
+                dataObj[msg.author.id] = { ...dataObj[msg.author.id], selected: i.values }
             });
 
 
@@ -68,7 +73,7 @@ module.exports = async (msg, attachments) => {
 
                     const t = ['平7', '平8', '平9', '平10', '平11']
 
-                    const tComponent = selected.map((select, index) => {
+                    const tComponent = dataObj[tInteraction.user.id].selected.map((select, index) => {
                         const items = t.map((t) => {
                             const json = { parts: select, t: t }
                             return new StringSelectMenuOptionBuilder()
@@ -100,11 +105,16 @@ module.exports = async (msg, attachments) => {
 
                     const collector = await tResponse.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 60_000 });
 
-                    const tSelected = []
-
                     collector.on('collect', i => {
                         i.deferUpdate();
+                        const tSelected = dataObj[i.user.id].tSelected || []
                         tSelected.push(i.values[0])
+
+                        dataObj[i.user.id] = {
+                            ...dataObj[i.user.id],
+                            tSelected
+                        }
+
                     });
 
 
@@ -114,7 +124,7 @@ module.exports = async (msg, attachments) => {
 
                             const categoryComponent =
                                 await Promise.all(
-                                    tSelected.map(async (select, index) => {
+                                    dataObj[categoryInteraction.user.id].tSelected?.map(async (select, index) => {
 
                                         const jsonObj = JSON.parse(select)
 
@@ -150,23 +160,33 @@ module.exports = async (msg, attachments) => {
                                 ephemeral: true
                             })
 
-                            const categorySelected = []
 
                             const categoryCollector = await categoryResponse.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 60_000 });
 
                             categoryCollector.on('collect', i => {
                                 i.deferUpdate();
+                                const categorySelected = dataObj[i.user.id].categorySelected || []
                                 categorySelected.push(i.values[0])
+        
+                                dataObj[i.user.id] = {
+                                    ...dataObj[i.user.id],
+                                    categorySelected
+                                }
+
                             });
+
+                            
 
                             categoryResponse.awaitMessageComponent({ componentType: ComponentType.Button, time: 60_000 })
                                 .then(async itemInteraction => {
+
+                                    console.log(dataObj)
 
                                     await itemInteraction.deferReply({ ephemeral: true });
 
                                     const itemComponent =
                                         await Promise.all(
-                                            categorySelected.map(async (select, index) => {
+                                            dataObj[itemInteraction.user.id].categorySelected.map(async (select, index) => {
 
                                                 const jsonObj = JSON.parse(select)
 
@@ -202,13 +222,18 @@ module.exports = async (msg, attachments) => {
                                         ephemeral: true
                                     })
 
-                                    const itemSelected = []
 
                                     const itemCollector = await itemResponse.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 60_000 });
 
                                     itemCollector.on('collect', i => {
                                         i.deferUpdate();
+                                        const itemSelected = dataObj[i.user.id].itemSelected || []
                                         itemSelected.push(i.values[0])
+                
+                                        dataObj[i.user.id] = {
+                                            ...dataObj[i.user.id],
+                                            itemSelected
+                                        }
                                     });
 
                                     itemResponse.awaitMessageComponent({ componentType: ComponentType.Button, time: 60_000 })
@@ -242,46 +267,56 @@ module.exports = async (msg, attachments) => {
 
                                             await remarkInteraction.showModal(modal);
 
-                                            remarkInteraction.awaitModalSubmit({ time: 60_000 })
-                                                .then(async fainaInteraction => {
+                                           await remarkInteraction.awaitModalSubmit({filter : i => i.user.id === remarkInteraction.user.id, time: 60_000 })
+                                               .then(async fainaInteraction => {
 
-                                                    const fields = fainaInteraction.fields.fields.map(field => field)
+                                                   const fields = fainaInteraction.fields.fields.map(field => field)
 
-                                                    const json = itemSelected.reduce((prev, current) => {
-                                                        const jsonObj = JSON.parse(current)
+                                                   const json = dataObj[fainaInteraction.user.id].itemSelected.reduce((prev, current) => {
+                                                       const jsonObj = JSON.parse(current)
 
-                                                        let t = jsonObj.t
+                                                       let t = jsonObj.t
 
-                                                        if (jsonObj.t == '平9') {
-                                                            t = '平8.1'
-                                                        } else if (jsonObj.t === '平10') {
-                                                            t = '平8.2'
-                                                        } else if (jsonObj.t === '平11') {
-                                                            t = '平8.3'
-                                                        }
+                                                       if (jsonObj.t == '平9') {
+                                                           t = '平8.1'
+                                                       } else if (jsonObj.t === '平10') {
+                                                           t = '平8.2'
+                                                       } else if (jsonObj.t === '平11') {
+                                                           t = '平8.3'
+                                                       }
 
-                                                        if (jsonObj.parts === '頭') {
-                                                            prev.head = `${t?.replace('平', 'T')}${jsonObj.name}`
-                                                        } else if (jsonObj.parts === '身') {
-                                                            prev.armor = `${t?.replace('平', 'T')}${jsonObj.name}`
-                                                        } else if (jsonObj.parts === '腳') {
-                                                            prev.shoes = `${t?.replace('平', 'T')}${jsonObj.name}`
-                                                        } else if (jsonObj.parts === '副手') {
-                                                            prev.offHand = `${t?.replace('平', 'T')}${jsonObj.name}`
-                                                        } else if (jsonObj.parts === '武器') {
-                                                            prev.weapon = `${jsonObj.t?.replace('平', 'T')}${jsonObj.name}`
-                                                        }
-                                                        return { ...prev }
-                                                    }, {})
+                                                       if (jsonObj.parts === '頭') {
+                                                           prev.head = `${t?.replace('平', 'T')}${jsonObj.name}`
+                                                       } else if (jsonObj.parts === '身') {
+                                                           prev.armor = `${t?.replace('平', 'T')}${jsonObj.name}`
+                                                       } else if (jsonObj.parts === '腳') {
+                                                           prev.shoes = `${t?.replace('平', 'T')}${jsonObj.name}`
+                                                       } else if (jsonObj.parts === '副手') {
+                                                           prev.offHand = `${t?.replace('平', 'T')}${jsonObj.name}`
+                                                       } else if (jsonObj.parts === '武器') {
+                                                           prev.weapon = `${jsonObj.t?.replace('平', 'T')}${jsonObj.name}`
+                                                       }
+                                                       return { ...prev }
+                                                   }, {})
 
-                                                    fainaInteraction.reply({ content: 'OC爆裝補裝申請完成。', ephemeral: true })
-                                                    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(attachments[0].url)
-                                                    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`<@${interaction.user.id}> 已申請OC爆裝補裝。`)
-                                                    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`備註 : ${fields[1].value || '無'} `)
+                                                   const userId = fainaInteraction.user.id
 
-                                                    await ocAdd({ ...json, isFighter, eventId: attachments[0].url, remark: fields[1].value, name: fields[0].value })
+                                                   fainaInteraction.reply({ content: 'OC爆裝補裝申請完成。', ephemeral: true })
+                                                   fainaInteraction.guild.channels.cache.get('1012789487715229746').send(dataObj[userId].attachments)
+                                                   fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`<@${interaction.user.id}> 已申請OC爆裝補裝。`)
+                                                   fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`備註 : ${fields[1].value || '無'} `)
 
-                                                })
+                                                   await ocAdd({
+                                                       ...json,
+                                                       isFighter: dataObj[userId].isFighter,
+                                                       eventId: dataObj[userId].attachments,
+                                                       remark: fields[1].value,
+                                                       name: fields[0].value
+                                                   })
+
+                                                   delete dataObj.userId
+
+                                               })
                                         })
 
                                 })

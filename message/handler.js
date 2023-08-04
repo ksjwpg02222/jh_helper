@@ -1,13 +1,17 @@
 const oc = require('./fun/oc.js')
 const logger = require('../logger.js')
+require('dotenv').config()
 
 module.exports = (msg) => {
     const attachments = Array.from(msg.attachments.values())
 
-    if (msg.channelId == '1130488156907638836' && attachments.length) {
-        logger.info(`${msg.member.displayName} used oc command.`)
-        oc(msg, attachments)
-    }
+    logger.info(msg.author.id)
 
+
+    if (attachments.length) {
+        if ((process.env.MODE === 'dev' && msg.channelId == '1010966927130251264') || msg.channelId == '1130488156907638836') {
+            oc(msg, attachments)
+        }
+    }
 }
 
