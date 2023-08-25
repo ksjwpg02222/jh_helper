@@ -32,12 +32,11 @@ module.exports = {
 
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
-        
+
         const isFighter = interaction.member._roles.some(role => role === '959422545088638987' || role === '1119473118650568734')
 
         const canRegear = interaction.member._roles.some(role => role === '1144686689198034994')
-
-        if(!isFighter && !canRegear){
+        if (!isFighter && !canRegear) {
             interaction.editReply({ content: '並無補裝資格，請洽詢教官索取補裝資格。', ephemeral: true });
             return
         }
@@ -153,6 +152,10 @@ module.exports = {
                     .setFooter({ text: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' });
 
                 await interaction.editReply({ embeds: [exampleEmbed], ephemeral: true });
+
+                const target = interaction.guild.members.cache.fiynd(member => member.id === interaction.user.id)
+
+                target.roles.remove('1144686689198034994')
 
                 for (let index = 0; index < fields.length; index++) {
                     try {
