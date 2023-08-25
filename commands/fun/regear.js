@@ -153,7 +153,7 @@ module.exports = {
 
                 await interaction.editReply({ embeds: [exampleEmbed], ephemeral: true });
 
-                const target = interaction.guild.members.cache.fiynd(member => member.id === interaction.user.id)
+                const target = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
 
                 target.roles.remove('1144686689198034994')
 
