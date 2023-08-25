@@ -31,8 +31,16 @@ module.exports = {
 
 
     async execute(interaction) {
-
         await interaction.deferReply({ ephemeral: true });
+        
+        const isFighter = interaction.member._roles.some(role => role === '959422545088638987' || role === '1119473118650568734')
+
+        const canRegear = interaction.member._roles.some(role => role === '1144686689198034994')
+
+        if(!isFighter && !canRegear){
+            interaction.editReply({ content: '並無補裝資格，請洽詢教官索取補裝資格。', ephemeral: true });
+            return
+        }
 
         const inGameName = interaction.options.getString('name');
 
@@ -117,7 +125,6 @@ module.exports = {
 
                 await interaction.deferReply({ ephemeral: true });
 
-                const isFighter = interaction.member._roles.some(role => role === '959422545088638987' || role === '1119473118650568734')
                 const fields = interaction.fields.fields.map(field => field)
 
                 const deathsInfo = Array.of(interaction.message.components)[0][0].components[0].options
