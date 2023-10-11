@@ -33,7 +33,8 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
 
-        const isFighter = interaction.member._roles.some(role => role === '959422545088638987' || role === '1119473118650568734')
+        const isFighter = interaction.member._roles.some(role => role === '959422545088638987' || role === '1161678404484083834')
+
 
         const canRegear = interaction.member._roles.some(role => role === '1144686689198034994')
         if (!isFighter && !canRegear) {
