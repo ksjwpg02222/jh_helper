@@ -78,6 +78,11 @@ module.exports = {
                 .setValue(`${item.EventId}`)
         ))
 
+        if(!selectItem.length){
+            await interaction.editReply({ content : '近三天內無任何死亡紀錄，若是近幾分鐘內有死亡的話請稍後再試。', ephemeral: true });
+            return
+        }
+
         const select = new StringSelectMenuBuilder()
             .setCustomId('starter')
             .setPlaceholder('請選擇欲申請補裝死亡紀錄')
