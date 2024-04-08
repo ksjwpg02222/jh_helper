@@ -302,9 +302,9 @@ module.exports = async (msg, attachments) => {
                                                    const userId = fainaInteraction.user.id
 
                                                    fainaInteraction.reply({ content: 'OC爆裝補裝申請完成。', ephemeral: true })
-                                                   fainaInteraction.guild.channels.cache.get('1012789487715229746').send(dataObj[userId].attachments)
-                                                   fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`<@${interaction.user.id}> 已申請OC爆裝補裝。`)
-                                                   fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`備註 : ${fields[1].value || '無'} `)
+                                                //    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(dataObj[userId].attachments)
+                                                //    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`<@${interaction.user.id}> 已申請OC爆裝補裝。`)
+                                                //    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`備註 : ${fields[1].value || '無'} `)
 
                                                    await ocAdd({
                                                        ...json,
