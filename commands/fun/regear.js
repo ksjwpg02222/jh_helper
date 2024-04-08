@@ -161,7 +161,7 @@ module.exports = {
 
                 const target = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
 
-                target.roles.remove('1144686689198034994')
+                target.roles.remove('1218507716767776829')
 
                 for (let index = 0; index < fields.length; index++) {
                     try {
