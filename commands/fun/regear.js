@@ -33,10 +33,10 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
 
-        const isFighter = interaction.member._roles.some(role => role === '959422545088638987' || role === '1161678404484083834')
+        const isFighter = interaction.member._roles.some(role => role === '1218506937872810035' )
 
 
-        const canRegear = interaction.member._roles.some(role => role === '1144686689198034994')
+        const canRegear = interaction.member._roles.some(role => role === '1218507716767776829')
         if (!isFighter && !canRegear) {
             interaction.editReply({ content: '並無補裝資格，請洽詢教官索取補裝資格。', ephemeral: true });
             return

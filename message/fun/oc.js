@@ -21,7 +21,7 @@ module.exports = async (msg, attachments) => {
 
             await interaction.deferReply({ ephemeral: true });
 
-            const isFighter = interaction.member._roles.some(role => role === '959422545088638987' || role === '1161678404484083834')
+            const isFighter = interaction.member._roles.some(role => role === '1218506937872810035')
 
             dataObj[msg.author.id] = { ...dataObj[msg.author.id], isFighter }
 
