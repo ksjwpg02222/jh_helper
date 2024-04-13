@@ -12,7 +12,7 @@ module.exports = async (msg, attachments) => {
         new ButtonBuilder()
             .setCustomId('oc')
             .setStyle(ButtonStyle.Primary)
-            .setLabel('點我以上方圖片申請補裝。'),
+            .setLabel('點我以上方圖片申請補裝(Click To Apply)'),
     );
     const response = await msg.reply({ components: [button], ephemeral: true });
 
@@ -25,7 +25,7 @@ module.exports = async (msg, attachments) => {
 
             dataObj[msg.author.id] = { ...dataObj[msg.author.id], isFighter }
 
-            const data = ['頭', '身', '腳', '武器', '副手']
+            const data = ['頭HEAD', '身BODY', '腳LEG', '武器WEAPON', '副手OFFHAND']
             const selectItem = data?.map((item) => (
                 new StringSelectMenuOptionBuilder()
                     .setLabel(item)
@@ -34,7 +34,7 @@ module.exports = async (msg, attachments) => {
 
             const select = new StringSelectMenuBuilder()
                 .setCustomId('broken')
-                .setPlaceholder('請選擇爆裝部位')
+                .setPlaceholder('請選擇爆裝部位 Pls Select Breaked Part')
                 .setMinValues(1)
                 .setMaxValues(selectItem.length)
                 .addOptions(selectItem);
@@ -48,11 +48,16 @@ module.exports = async (msg, attachments) => {
                 new ButtonBuilder()
                     .setCustomId('button')
                     .setStyle(ButtonStyle.Success)
-                    .setLabel('下一步'),
+                    .setLabel('下一步 Next'),
             );
 
             const response = await interaction.editReply({
-                content: '請選擇爆裝部位 \n 如果含副手五件全爆的話請分兩次\n 下一個步驟沒辦法容納那麼多選擇框\n',
+                content: '請選擇爆裝部位\n' +
+                    '如果含副手五件全爆的話請分兩次\n' +
+                    '下一個步驟沒辦法容納那麼多選擇框\n' +
+                    'Pls Select Breaked Parts\n' +
+                    'If All Breaked (Include Offhand)\n' +
+                    'Pls Apply Twice\n',
                 ephemeral: true,
                 components: [row, button]
 
@@ -83,7 +88,7 @@ module.exports = async (msg, attachments) => {
 
                         return new StringSelectMenuBuilder()
                             .setCustomId(`t${index}`)
-                            .setPlaceholder(`請選擇 "${select}" 的T數`)
+                            .setPlaceholder(`請選擇 "${select}" 的T數 \nPls Select Tier`)
                             .addOptions(items)
                     })
 
@@ -94,11 +99,11 @@ module.exports = async (msg, attachments) => {
                         new ButtonBuilder()
                             .setCustomId('tButton')
                             .setStyle(ButtonStyle.Success)
-                            .setLabel('下一步'),
+                            .setLabel('下一步 Next'),
                     );
 
                     const tResponse = await tInteraction.editReply({
-                        content: '請選擇T數:',
+                        content: '請選擇T數(Pls Select Tier):',
                         components: [...tRows, tButton],
                         ephemeral: true
                     })
@@ -139,7 +144,7 @@ module.exports = async (msg, attachments) => {
 
                                         return new StringSelectMenuBuilder()
                                             .setCustomId(`category${index}`)
-                                            .setPlaceholder(`請選擇 "${jsonObj.parts}" 的類別`)
+                                            .setPlaceholder(`請選擇 "${jsonObj.parts}" 的類別 \nPls Select Part`)
                                             .addOptions(items)
                                     })
                                 )
@@ -151,7 +156,7 @@ module.exports = async (msg, attachments) => {
                                 new ButtonBuilder()
                                     .setCustomId('categoryButton')
                                     .setStyle(ButtonStyle.Success)
-                                    .setLabel('下一步'),
+                                    .setLabel('下一步 Next'),
                             );
 
                             const categoryResponse = await categoryInteraction.editReply({
@@ -167,7 +172,7 @@ module.exports = async (msg, attachments) => {
                                 i.deferUpdate();
                                 const categorySelected = dataObj[i.user.id].categorySelected || []
                                 categorySelected.push(i.values[0])
-        
+
                                 dataObj[i.user.id] = {
                                     ...dataObj[i.user.id],
                                     categorySelected
@@ -175,12 +180,10 @@ module.exports = async (msg, attachments) => {
 
                             });
 
-                            
+
 
                             categoryResponse.awaitMessageComponent({ componentType: ComponentType.Button, time: 60_000 })
                                 .then(async itemInteraction => {
-
-                                    console.log(dataObj)
 
                                     await itemInteraction.deferReply({ ephemeral: true });
 
@@ -192,16 +195,16 @@ module.exports = async (msg, attachments) => {
 
                                                 const items = await queryByCategoryAndParts(jsonObj)
 
-                                                const options = items.map((item) => {
-                                                    const json = { ...jsonObj, name: item.name }
+                                                const options = items.map(({ name, en_name }) => {
+                                                    const json = { ...jsonObj, name: name }
                                                     return new StringSelectMenuOptionBuilder()
-                                                        .setLabel(`${jsonObj.t}-${item.name}`)
+                                                        .setLabel(`${jsonObj.t}-${name}-${en_name}`)
                                                         .setValue(JSON.stringify(json))
                                                 })
 
                                                 return new StringSelectMenuBuilder()
                                                     .setCustomId(`item${index}`)
-                                                    .setPlaceholder(`請選擇${jsonObj.parts}裝備`)
+                                                    .setPlaceholder(`請選擇${jsonObj.parts}裝備 \nPls Select ${jsonObj.parts} Item.`)
                                                     .addOptions(options)
                                             })
                                         )
@@ -213,11 +216,11 @@ module.exports = async (msg, attachments) => {
                                         new ButtonBuilder()
                                             .setCustomId('categoryButton')
                                             .setStyle(ButtonStyle.Success)
-                                            .setLabel('下一步'),
+                                            .setLabel('下一步 Next'),
                                     );
 
                                     const itemResponse = await itemInteraction.editReply({
-                                        content: '請選擇裝備:',
+                                        content: '請選擇裝備(Pls Select Item):',
                                         components: [...itemRows, itemButton],
                                         ephemeral: true
                                     })
@@ -229,7 +232,7 @@ module.exports = async (msg, attachments) => {
                                         i.deferUpdate();
                                         const itemSelected = dataObj[i.user.id].itemSelected || []
                                         itemSelected.push(i.values[0])
-                
+
                                         dataObj[i.user.id] = {
                                             ...dataObj[i.user.id],
                                             itemSelected
@@ -241,22 +244,22 @@ module.exports = async (msg, attachments) => {
 
                                             const ignInput = new TextInputBuilder()
                                                 .setCustomId(`ign`)
-                                                .setLabel(`遊戲內名稱(大小寫需一至)`)
+                                                .setLabel(`遊戲內名稱(大小寫需一致) \nIn Game Name`)
                                                 .setStyle(TextInputStyle.Short)
-                                                .setPlaceholder('請輸入遊戲內名稱(大小寫需一至)')
+                                                .setPlaceholder('請輸入遊戲內名稱(大小寫需一致) In Game Name')
                                                 .setRequired(true)
 
                                             const remarkInput = new TextInputBuilder()
                                                 .setCustomId(`remark`)
-                                                .setLabel(`OC爆裝補裝事項備註`)
+                                                .setLabel(`OC爆裝補裝事項備註 Remark`)
                                                 .setStyle(TextInputStyle.Short)
-                                                .setPlaceholder('請輸入備註(可不填)')
+                                                .setPlaceholder('請輸入備註(可不填) Remark')
                                                 .setRequired(false)
 
 
                                             const modal = new ModalBuilder()
                                                 .setCustomId('remark')
-                                                .setTitle('OC爆裝補裝事項備註');
+                                                .setTitle('OC爆裝補裝事項備註 Remark');
 
                                             const ignRow = new ActionRowBuilder().addComponents(ignInput)
                                             const remarkRow = new ActionRowBuilder().addComponents(remarkInput)
@@ -267,56 +270,56 @@ module.exports = async (msg, attachments) => {
 
                                             await remarkInteraction.showModal(modal);
 
-                                           await remarkInteraction.awaitModalSubmit({filter : i => i.user.id === remarkInteraction.user.id, time: 60_000 })
-                                               .then(async fainaInteraction => {
+                                            await remarkInteraction.awaitModalSubmit({ filter: i => i.user.id === remarkInteraction.user.id, time: 60_000 })
+                                                .then(async fainaInteraction => {
 
-                                                   const fields = fainaInteraction.fields.fields.map(field => field)
+                                                    const fields = fainaInteraction.fields.fields.map(field => field)
 
-                                                   const json = dataObj[fainaInteraction.user.id].itemSelected.reduce((prev, current) => {
-                                                       const jsonObj = JSON.parse(current)
+                                                    const json = dataObj[fainaInteraction.user.id].itemSelected.reduce((prev, current) => {
+                                                        const jsonObj = JSON.parse(current)
 
-                                                       let t = jsonObj.t
+                                                        let t = jsonObj.t
 
-                                                       if (jsonObj.t == '平9') {
-                                                           t = '平8.1'
-                                                       } else if (jsonObj.t === '平10') {
-                                                           t = '平8.2'
-                                                       } else if (jsonObj.t === '平11') {
-                                                           t = '平8.3'
-                                                       }
+                                                        if (jsonObj.t == '平9') {
+                                                            t = '平8.1'
+                                                        } else if (jsonObj.t === '平10') {
+                                                            t = '平8.2'
+                                                        } else if (jsonObj.t === '平11') {
+                                                            t = '平8.3'
+                                                        }
 
-                                                       if (jsonObj.parts === '頭') {
-                                                           prev.head = `${t?.replace('平', 'T')}${jsonObj.name}`
-                                                       } else if (jsonObj.parts === '身') {
-                                                           prev.armor = `${t?.replace('平', 'T')}${jsonObj.name}`
-                                                       } else if (jsonObj.parts === '腳') {
-                                                           prev.shoes = `${t?.replace('平', 'T')}${jsonObj.name}`
-                                                       } else if (jsonObj.parts === '副手') {
-                                                           prev.offHand = `${t?.replace('平', 'T')}${jsonObj.name}`
-                                                       } else if (jsonObj.parts === '武器') {
-                                                           prev.weapon = `${jsonObj.t?.replace('平', 'T')}${jsonObj.name}`
-                                                       }
-                                                       return { ...prev }
-                                                   }, {})
+                                                        if (jsonObj.parts === '頭HEAD') {
+                                                            prev.head = `${t?.replace('平', 'T')}${jsonObj.name}`
+                                                        } else if (jsonObj.parts === '身BODY') {
+                                                            prev.armor = `${t?.replace('平', 'T')}${jsonObj.name}`
+                                                        } else if (jsonObj.parts === '腳LEG') {
+                                                            prev.shoes = `${t?.replace('平', 'T')}${jsonObj.name}`
+                                                        } else if (jsonObj.parts === '副手OFFHAND') {
+                                                            prev.offHand = `${t?.replace('平', 'T')}${jsonObj.name}`
+                                                        } else if (jsonObj.parts === '武器WEAPON') {
+                                                            prev.weapon = `${jsonObj.t?.replace('平', 'T')}${jsonObj.name}`
+                                                        }
+                                                        return { ...prev }
+                                                    }, {})
 
-                                                   const userId = fainaInteraction.user.id
+                                                    const userId = fainaInteraction.user.id
 
-                                                   fainaInteraction.reply({ content: 'OC爆裝補裝申請完成。', ephemeral: true })
-                                                //    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(dataObj[userId].attachments)
-                                                //    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`<@${interaction.user.id}> 已申請OC爆裝補裝。`)
-                                                //    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`備註 : ${fields[1].value || '無'} `)
+                                                    fainaInteraction.reply({ content: 'OC爆裝補裝申請完成。 \n Complete.', ephemeral: true })
+                                                    //    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(dataObj[userId].attachments)
+                                                    //    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`<@${interaction.user.id}> 已申請OC爆裝補裝。`)
+                                                    //    fainaInteraction.guild.channels.cache.get('1012789487715229746').send(`備註 : ${fields[1].value || '無'} `)
 
-                                                   await ocAdd({
-                                                       ...json,
-                                                       isFighter: dataObj[userId].isFighter,
-                                                       eventId: dataObj[userId].attachments,
-                                                       remark: fields[1].value,
-                                                       name: fields[0].value
-                                                   })
+                                                    await ocAdd({
+                                                        ...json,
+                                                        isFighter: dataObj[userId].isFighter,
+                                                        eventId: dataObj[userId].attachments,
+                                                        remark: fields[1].value,
+                                                        name: fields[0].value
+                                                    })
 
-                                                   delete dataObj.userId
+                                                    delete dataObj.userId
 
-                                               })
+                                                })
                                         })
 
                                 })

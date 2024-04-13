@@ -18,6 +18,9 @@ const Items = sequelize.define('item', {
     },
     parts: {
         type: Sequelize.STRING
+    },
+    en_name: {
+        type: Sequelize.STRING
     }
 });
 
@@ -29,11 +32,11 @@ const groupByArgs = async (args) => await Items.findAll({ group: args, attribute
 
 const queryByPartsThenGroupByCategory = async (args) => await Items.findAll({ raw: true, group: 'category', where: { parts: args.parts }, attributes: ['category'] })
 
-const queryByCategoryAndParts = async (args) => await Items.findAll({ where: { parts: args.parts, category: args.category }, attributes: ['name'] })
+const queryByCategoryAndParts = async (args) => await Items.findAll({ where: { parts: args.parts, category: args.category }, attributes: ['name', 'en_name'] })
 
 const initData = async () => {
     const data = await getData()
-    const jsonArray = data.map(d => ({ name: d[1], category: d[2], type: d[3], parts: d[4] }))
+    const jsonArray = data.map(d => ({ name: d[1], category: d[2], type: d[3], parts: d[4], en_name: d[5] }))
     await Items.bulkCreate(jsonArray)
 }
 
@@ -51,4 +54,4 @@ async function getData() {
     return result;
 };
 
-module.exports = { Item: Items, itemCount,  initData, findByType, groupByArgs, queryByPartsThenGroupByCategory, queryByCategoryAndParts }
+module.exports = { Item: Items, itemCount, initData, findByType, groupByArgs, queryByPartsThenGroupByCategory, queryByCategoryAndParts }

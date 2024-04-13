@@ -48,7 +48,7 @@ module.exports = {
         const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Just Hold')
 
         if (!player) {
-            await interaction.editReply({ content: '輸入的查詢名稱並未是JH之成員。', ephemeral: true });
+            await interaction.editReply({ content: '輸入的查詢名稱並未是JH之成員 \n Is Not Just Hold Member', ephemeral: true });
             return
         }
 
@@ -63,7 +63,7 @@ module.exports = {
 
         const exampleEmbed = new EmbedBuilder()
             .setColor(0x0099FF)
-            .setTitle(inGameName || '無資料')
+            .setTitle(inGameName || '無資料 No Data')
             .setAuthor({ name: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' })
             .setDescription('最近 "兩天內" 的死亡紀錄(新至舊，最多10筆)')
             .setThumbnail('https://i.imgur.com/5IO5kPT.png')
@@ -79,13 +79,13 @@ module.exports = {
         ))
 
         if(!selectItem.length){
-            await interaction.editReply({ content : '近三天內無任何死亡紀錄，若是近幾分鐘內有死亡的話請稍後再試。', ephemeral: true });
+            await interaction.editReply({ content : '近三天內無任何死亡紀錄，若是近幾分鐘內有死亡的話請稍後再試。 \n No Data', ephemeral: true });
             return
         }
 
         const select = new StringSelectMenuBuilder()
             .setCustomId('starter')
-            .setPlaceholder('請選擇欲申請補裝死亡紀錄')
+            .setPlaceholder('請選擇欲申請補裝死亡紀錄 Pls Select Death Record')
             .setMinValues(1)
             .setMaxValues(selectItem.length)
             .addOptions(selectItem);
@@ -112,13 +112,13 @@ module.exports = {
                             .setCustomId(`${item.EventId}`)
                             .setLabel(`${index + 1}.  被 [${item.Killer.GuildName}]${item.Killer.Name} 殺了`)
                             .setStyle(TextInputStyle.Short)
-                            .setPlaceholder('請輸入備註(可不填)')
+                            .setPlaceholder('請輸入備註(可不填) Remark')
                             .setRequired(false)
                     ))
 
             const modal = new ModalBuilder()
                 .setCustomId('regear')
-                .setTitle('補裝事項備註');
+                .setTitle('補裝事項備註 Remark');
 
             const actionRows = inputs.map(input => new ActionRowBuilder().addComponents(input))
 
@@ -149,9 +149,9 @@ module.exports = {
 
                 const exampleEmbed = new EmbedBuilder()
                     .setColor(0x0099FF)
-                    .setTitle('補裝資訊')
+                    .setTitle('補裝資訊 Info')
                     .setAuthor({ name: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' })
-                    .setDescription('已送出補裝資料')
+                    .setDescription('已送出補裝資料 Complete')
                     .setThumbnail('https://i.imgur.com/5IO5kPT.png')
                     .addFields(regearInfo)
                     .setTimestamp()
@@ -173,7 +173,7 @@ module.exports = {
                         if (error.name === 'SequelizeUniqueConstraintError') {
                             await interaction.followUp({ content: `https://albiononline.com/killboard/kill/${fields[index].customId}?server=live_sgp 補裝紀錄已存在`, ephemeral: true })
                         } else {
-                            await interaction.followUp({ content: `發生未知錯誤、請找管理員。`, ephemeral: true })
+                            await interaction.followUp({ content: `發生未知錯誤、請找管理員 \nError.`, ephemeral: true })
                         }
                     }
                 }
