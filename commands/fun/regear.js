@@ -119,7 +119,7 @@ module.exports = {
 
                         return new TextInputBuilder()
                             .setCustomId(`${item.EventId}`)
-                            .setLabel()
+                            .setLabel(text)
                             .setStyle(TextInputStyle.Short)
                             .setPlaceholder('請輸入備註(可不填) Remark')
                             .setRequired(false)
