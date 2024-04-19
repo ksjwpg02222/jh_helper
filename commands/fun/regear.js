@@ -33,7 +33,7 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
 
-        const isFighter = interaction.member._roles.some(role => role === '1218506937872810035' )
+        const isFighter = interaction.member._roles.some(role => role === '1218506937872810035')
 
 
         const canRegear = interaction.member._roles.some(role => role === '1218507716767776829')
@@ -78,8 +78,8 @@ module.exports = {
                 .setValue(`${item.EventId}`)
         ))
 
-        if(!selectItem.length){
-            await interaction.editReply({ content : '近三天內無任何死亡紀錄，若是近幾分鐘內有死亡的話請稍後再試。 \n No Data', ephemeral: true });
+        if (!selectItem.length) {
+            await interaction.editReply({ content: '近三天內無任何死亡紀錄，若是近幾分鐘內有死亡的話請稍後再試。 \n No Data', ephemeral: true });
             return
         }
 
@@ -107,14 +107,23 @@ module.exports = {
 
             const inputs =
                 data.filter(d => selection.find(select => +d.EventId === +select))
-                    .map((item, index) => (
-                        new TextInputBuilder()
+                    .map((item, index) => {
+                        let text = `${index + 1}.  被 [${item.Killer.GuildName}]${item.Killer.Name} 殺了`
+                        if (text.length > 45) {
+                            const guildName = item.Killer.GuildName.split(' ').reduce((prev, current) => {
+                                prev += current.charAt(0).toUpperCase()
+                                return prev
+                            }, '')
+                            text = `${index + 1}.  被 [${guildName}]${item.Killer.Name} 殺了`
+                        }
+
+                        return new TextInputBuilder()
                             .setCustomId(`${item.EventId}`)
-                            .setLabel(`${index + 1}.  被 [${item.Killer.GuildName}]${item.Killer.Name} 殺了`)
+                            .setLabel()
                             .setStyle(TextInputStyle.Short)
                             .setPlaceholder('請輸入備註(可不填) Remark')
                             .setRequired(false)
-                    ))
+                    })
 
             const modal = new ModalBuilder()
                 .setCustomId('regear')
