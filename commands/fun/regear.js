@@ -58,12 +58,11 @@ module.exports = {
         let canRegear;
         if (+tier === 9) {
             canRegear = interaction.member._roles.some(role => role === t9)
-        }
-        if (+tier === 8) {
+        } else {
             canRegear = interaction.member._roles.some(role => role === t8)
         }
 
-        if (!isFighter && !canRegear) {
+        if (!canRegear) {
             interaction.editReply({ content: `並無T${tier}補裝資格，請洽詢教官索取補裝資格。`, ephemeral: true });
             return
         }
