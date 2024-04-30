@@ -58,7 +58,8 @@ module.exports = {
         let canRegear;
         if (+tier === 9) {
             canRegear = interaction.member._roles.some(role => role === t9)
-        } else {
+        }
+        if (+tier === 8) {
             canRegear = interaction.member._roles.some(role => role === t8)
         }
 
