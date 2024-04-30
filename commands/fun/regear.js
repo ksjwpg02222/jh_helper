@@ -26,23 +26,48 @@ module.exports = {
                     "zh-TW": '遊戲內名稱',
                     "zh-CN": '游戏内名称'
                 })
-                .setRequired(true)),
+                .setRequired(true)).addStringOption(option =>
+                    option.setName('tier')
+                        .setNameLocalizations({
+                            "zh-TW": '等級',
+                            "zh-CN": '等级',
+                        })
+                        .setDescription('Choices Regear Tier')
+                        .setDescriptionLocalizations({
+                            "zh-TW": '請選擇裝備等級',
+                            "zh-CN": '请选择装备等级'
+                        })
+                        .setRequired(true)
+                        .addChoices(
+                            { name: 'T8', value: "8" },
+                            { name: 'T9', value: "9" }
+                        )),
 
 
 
     async execute(interaction) {
+        const t8 = '1234712990557933619'
+        const t9 = '1234713051031404585'
+
         await interaction.deferReply({ ephemeral: true });
 
         const isFighter = interaction.member._roles.some(role => role === '1218506937872810035')
+        const inGameName = interaction.options.getString('name');
+        const tier = interaction.options.getString('tier');
 
+        let canRegear;
+        if (+tier === 9) {
+            canRegear = interaction.member._roles.some(role => role === t9)
+        }
+        if (+tier === 8) {
+            canRegear = interaction.member._roles.some(role => role === t8)
+        }
 
-        const canRegear = interaction.member._roles.some(role => role === '1218507716767776829')
         if (!isFighter && !canRegear) {
-            interaction.editReply({ content: '並無補裝資格，請洽詢教官索取補裝資格。', ephemeral: true });
+            interaction.editReply({ content: `並無T${tier}補裝資格，請洽詢教官索取補裝資格。`, ephemeral: true });
             return
         }
 
-        const inGameName = interaction.options.getString('name');
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
         const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Just Hold')
@@ -170,13 +195,18 @@ module.exports = {
 
                 const target = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
 
-                target.roles.remove('1218507716767776829')
+                if (+tier === 8) {
+                    target.roles.remove(t8)
+                }
+                if (+tier === 9) {
+                    target.roles.remove(t9)
+                }
 
                 for (let index = 0; index < fields.length; index++) {
                     try {
                         await CreateRegearEventIdFunc(fields[index].customId)
 
-                        await pushData(fields[index].customId, remarkJsonObj, isFighter)
+                        await pushData(fields[index].customId, remarkJsonObj, isFighter, tier)
                     }
                     catch (error) {
                         if (error.name === 'SequelizeUniqueConstraintError') {
