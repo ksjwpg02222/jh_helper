@@ -88,7 +88,7 @@ module.exports = async (eventId, remarkJsonObj, isFighter, tier) => {
     let result = {
         name: victim["Name"],
         weapon: weaponNameParser(equipment["MainHand"], dict, tier),
-        offHand: nameParser(equipment["OffHand"], dict),
+        offHand: weaponNameParser(equipment["OffHand"], dict),
         head: nameParser(equipment["Head"], dict),
         armor: nameParser(equipment["Armor"], dict),
         shoes: nameParser(equipment["Shoes"], dict),
