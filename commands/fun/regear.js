@@ -69,7 +69,7 @@ module.exports = {
             return
         }
 
-		logger.info(`${inGameName}申請${tier}補裝`);
+        logger.info(`${inGameName}申請${tier}補裝`);
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
         const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Just Hold')
@@ -149,7 +149,7 @@ module.exports = {
                             .setLabel(text)
                             .setStyle(TextInputStyle.Short)
                             .setPlaceholder('備註必填 (時間、MASS類型、caller)')
-                            .setRequired(true)
+                            .setRequired(false)
                     })
 
             const modal = new ModalBuilder()
