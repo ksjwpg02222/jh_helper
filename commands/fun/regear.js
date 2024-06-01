@@ -162,63 +162,64 @@ module.exports = {
 
             await i.showModal(modal);
 
-            i.awaitModalSubmit({ time: 120_000 }).then(async interaction => {
+            i.awaitModalSubmit({ filter: filterI => filterI.user.id === i.user.id, time: 120_000 })
+                .then(async interaction => {
 
-                await interaction.deferReply({ ephemeral: true });
+                    await interaction.deferReply({ ephemeral: true });
 
-                const fields = interaction.fields.fields.map(field => field)
+                    const fields = interaction.fields.fields.map(field => field)
 
-                const deathsInfo = Array.of(interaction.message.components)[0][0].components[0].options
+                    const deathsInfo = Array.of(interaction.message.components)[0][0].components[0].options
 
-                const remarkJsonObj = fields.reduce((prev, current) => {
-                    prev[current.customId] = current.value
-                    return { ...prev }
-                }, {})
+                    const remarkJsonObj = fields.reduce((prev, current) => {
+                        prev[current.customId] = current.value
+                        return { ...prev }
+                    }, {})
 
-                const regearInfo =
-                    deathsInfo
-                        .filter(info => fields.find(field => +info.value === +field.customId))
-                        .map((item, index) => ({
-                            name: `${index + 1}. ${item.description}`,
-                            value: `備註:${remarkJsonObj[item.value] || '無'} \n https://albiononline.com/killboard/kill/${item.value}?server=live_sgp`
-                        }))
+                    const regearInfo =
+                        deathsInfo
+                            .filter(info => fields.find(field => +info.value === +field.customId))
+                            .map((item, index) => ({
+                                name: `${index + 1}. ${item.description}`,
+                                value: `備註:${remarkJsonObj[item.value] || '無'} \n https://albiononline.com/killboard/kill/${item.value}?server=live_sgp`
+                            }))
 
-                const exampleEmbed = new EmbedBuilder()
-                    .setColor(0x0099FF)
-                    .setTitle('補裝資訊 Info')
-                    .setAuthor({ name: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' })
-                    .setDescription('已送出補裝資料 Complete')
-                    .setThumbnail('https://i.imgur.com/5IO5kPT.png')
-                    .addFields(regearInfo)
-                    .setTimestamp()
-                    .setFooter({ text: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' });
+                    const exampleEmbed = new EmbedBuilder()
+                        .setColor(0x0099FF)
+                        .setTitle('補裝資訊 Info')
+                        .setAuthor({ name: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' })
+                        .setDescription('已送出補裝資料 Complete')
+                        .setThumbnail('https://i.imgur.com/5IO5kPT.png')
+                        .addFields(regearInfo)
+                        .setTimestamp()
+                        .setFooter({ text: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' });
 
-                await interaction.editReply({ embeds: [exampleEmbed], ephemeral: true });
+                    await interaction.editReply({ embeds: [exampleEmbed], ephemeral: true });
 
-                const target = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
+                    const target = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
 
-                if (+tier === 8) {
-                    target.roles.remove(t8)
-                }
-                if (+tier === 9) {
-                    target.roles.remove(t9)
-                }
-
-                for (let index = 0; index < fields.length; index++) {
-                    try {
-                        await CreateRegearEventIdFunc(fields[index].customId)
-
-                        await pushData(fields[index].customId, remarkJsonObj, isFighter, tier)
+                    if (+tier === 8) {
+                        target.roles.remove(t8)
                     }
-                    catch (error) {
-                        if (error.name === 'SequelizeUniqueConstraintError') {
-                            await interaction.followUp({ content: `https://albiononline.com/killboard/kill/${fields[index].customId}?server=live_sgp 補裝紀錄已存在`, ephemeral: true })
-                        } else {
-                            await interaction.followUp({ content: `發生未知錯誤、請找管理員 \nError.`, ephemeral: true })
+                    if (+tier === 9) {
+                        target.roles.remove(t9)
+                    }
+
+                    for (let index = 0; index < fields.length; index++) {
+                        try {
+                            await CreateRegearEventIdFunc(fields[index].customId)
+
+                            await pushData(fields[index].customId, remarkJsonObj, isFighter, tier)
+                        }
+                        catch (error) {
+                            if (error.name === 'SequelizeUniqueConstraintError') {
+                                await interaction.followUp({ content: `https://albiononline.com/killboard/kill/${fields[index].customId}?server=live_sgp 補裝紀錄已存在`, ephemeral: true })
+                            } else {
+                                await interaction.followUp({ content: `發生未知錯誤、請找管理員 \nError.`, ephemeral: true })
+                            }
                         }
                     }
-                }
-            })
+                })
 
         });
     },
