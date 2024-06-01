@@ -2,6 +2,7 @@ const { SlashCommandBuilder, StringSelectMenuBuilder, TextInputBuilder, ModalBui
 const { default: axios } = require("axios");
 const pushData = require("../../convertAndAdd.js")
 const { CreateRegearEventIdFunc } = require('../../sql/table/regearEventIds.js');
+const logger = require('../../logger.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -68,6 +69,7 @@ module.exports = {
             return
         }
 
+		logger.info(`${inGameName}申請${tier}補裝`);
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
         const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Just Hold')
@@ -104,7 +106,7 @@ module.exports = {
         ))
 
         if (!selectItem.length) {
-            await interaction.editReply({ content: '近三天內無任何死亡紀錄，若是近幾分鐘內有死亡的話請稍後再試。 \n No Data', ephemeral: true });
+            await interaction.editReply({ content: '近一天內無任何死亡紀錄，若是近幾分鐘內有死亡的話請稍後再試。 \n No Data', ephemeral: true });
             return
         }
 
@@ -146,8 +148,8 @@ module.exports = {
                             .setCustomId(`${item.EventId}`)
                             .setLabel(text)
                             .setStyle(TextInputStyle.Short)
-                            .setPlaceholder('請輸入備註(可不填) Remark')
-                            .setRequired(false)
+                            .setPlaceholder('備註必填 (時間、MASS類型、caller)')
+                            .setRequired(true)
                     })
 
             const modal = new ModalBuilder()
