@@ -81,7 +81,7 @@ module.exports = {
 
         const { data: deaths } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/players/${player.Id}/deaths`)
 
-        const data = deaths.filter(death => new Date().getTime() - new Date(death.TimeStamp).getTime() < 86400000)
+        const data = deaths.filter(death => new Date().getTime() - new Date(death.TimeStamp).getTime() < 172800000)
 
         const info = data?.map((item, index) => ({
             name: `${index + 1}. [${item.Killer.GuildName}]${item.Killer.Name} 殺了 [${item.Victim.GuildName}]${item.Victim.Name}`,
@@ -92,7 +92,7 @@ module.exports = {
             .setColor(0x0099FF)
             .setTitle(inGameName || '無資料 No Data')
             .setAuthor({ name: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' })
-            .setDescription('最近 "一天內" 的死亡紀錄(新至舊，最多10筆)')
+            .setDescription('最近 "兩天內" 的死亡紀錄(新至舊，最多10筆)')
             .setThumbnail('https://i.imgur.com/5IO5kPT.png')
             .addFields(info)
             .setTimestamp()
@@ -106,7 +106,7 @@ module.exports = {
         ))
 
         if (!selectItem.length) {
-            await interaction.editReply({ content: '近一天內無任何死亡紀錄，若是近幾分鐘內有死亡的話請稍後再試。 \n No Data', ephemeral: true });
+            await interaction.editReply({ content: '近兩天內無任何死亡紀錄，若是近幾分鐘內有死亡的話請稍後再試。 \n No Data', ephemeral: true });
             return
         }
 
