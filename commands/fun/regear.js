@@ -149,7 +149,7 @@ module.exports = {
                             .setLabel(text)
                             .setStyle(TextInputStyle.Short)
                             .setPlaceholder('備註必填 (時間、MASS類型、caller)')
-                            .setRequired(false)
+                            .setRequired(true)
                     })
 
             const modal = new ModalBuilder()
