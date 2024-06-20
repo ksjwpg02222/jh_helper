@@ -253,8 +253,8 @@ module.exports = async (msg, attachments) => {
                                                 .setCustomId(`remark`)
                                                 .setLabel(`OC爆裝補裝事項備註 Remark`)
                                                 .setStyle(TextInputStyle.Short)
-                                                .setPlaceholder('請輸入備註(可不填) Remark')
-                                                .setRequired(false)
+                                                .setPlaceholder('備註必填 (時間、MASS類型、caller)')
+                                                .setRequired(true)
 
 
                                             const modal = new ModalBuilder()
