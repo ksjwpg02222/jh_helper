@@ -20,24 +20,24 @@ module.exports = {
         logger.info('Ready!');
 
 
-        const t8 = '1234712990557933619'
-        const t9 = '1234713051031404585'
+        // const t8 = '1234712990557933619'
+        // const t9 = '1234713051031404585'
 
-        const job = CronJob.from({
-            cronTime: '0 0 20 * * *',
-            onTick: async function () {
-                logger.info('補裝身分組移除排程開始');
-                const guild = client.guilds.cache.first()
+        // const job = CronJob.from({
+        //     cronTime: '0 0 20 * * *',
+        //     onTick: async function () {
+        //         logger.info('補裝身分組移除排程開始');
+        //         const guild = client.guilds.cache.first()
 
-                let targetList = guild.members.cache;
-                targetList.forEach((target) => {
-                    target.roles.remove(t8)
-                    target.roles.remove(t9)
-                });
-                logger.info('補裝身分組移除排程結束');
-            },
-            start: true,
-            timeZone: 'Asia/Hong_Kong'
-        });
+        //         let targetList = guild.members.cache;
+        //         targetList.forEach((target) => {
+        //             target.roles.remove(t8)
+        //             target.roles.remove(t9)
+        //         });
+        //         logger.info('補裝身分組移除排程結束');
+        //     },
+        //     start: true,
+        //     timeZone: 'Asia/Hong_Kong'
+        // });
     },
 };

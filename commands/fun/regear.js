@@ -27,55 +27,30 @@ module.exports = {
                     "zh-TW": '遊戲內名稱',
                     "zh-CN": '游戏内名称'
                 })
-                .setRequired(true)).addStringOption(option =>
-                    option.setName('tier')
-                        .setNameLocalizations({
-                            "zh-TW": '等級',
-                            "zh-CN": '等级',
-                        })
-                        .setDescription('Choices Regear Tier')
-                        .setDescriptionLocalizations({
-                            "zh-TW": '請選擇裝備等級',
-                            "zh-CN": '请选择装备等级'
-                        })
-                        .setRequired(true)
-                        .addChoices(
-                            { name: 'T8', value: "8" },
-                            { name: 'T9', value: "9" }
-                        )),
-
+                .setRequired(true)),
 
 
     async execute(interaction) {
-        const t8 = '1234712990557933619'
-        const t9 = '1234713051031404585'
+        const t8 = '1257304498775523409'
 
         await interaction.deferReply({ ephemeral: true });
 
-        const isFighter = interaction.member._roles.some(role => role === '1218506937872810035')
+        // const isFighter = interaction.member._roles.some(role => role === '1218506937872810035')
+        const isFighter = false
         const inGameName = interaction.options.getString('name');
-        const tier = interaction.options.getString('tier');
 
-        let canRegear;
-        if (+tier === 9) {
-            canRegear = interaction.member._roles.some(role => role === t9)
-        }
-        if (+tier === 8) {
-            canRegear = interaction.member._roles.some(role => role === t8)
-        }
-
-        if (!canRegear) {
-            interaction.editReply({ content: `並無T${tier}補裝資格，請洽詢教官索取補裝資格。`, ephemeral: true });
+        if (!interaction.member._roles.some(role => role === t8)) {
+            interaction.editReply({ content: `並無T補裝資格，請洽詢教官索取補裝資格。`, ephemeral: true });
             return
         }
 
-        logger.info(`${inGameName}申請${tier}補裝`);
+        logger.info(`${inGameName}申請補裝`);
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
-        const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Just Hold')
+        const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Shakaboom')
 
         if (!player) {
-            await interaction.editReply({ content: '輸入的查詢名稱並未是JH之成員 \n Is Not Just Hold Member', ephemeral: true });
+            await interaction.editReply({ content: '輸入的查詢名稱並未是Shakaboom之成員 \n Is Not Shakaboom Member', ephemeral: true });
             return
         }
 
@@ -91,12 +66,11 @@ module.exports = {
         const exampleEmbed = new EmbedBuilder()
             .setColor(0x0099FF)
             .setTitle(inGameName || '無資料 No Data')
-            .setAuthor({ name: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' })
+            .setAuthor({ name: 'Shakaboom' })
             .setDescription('最近 "兩天內" 的死亡紀錄(新至舊，最多10筆)')
-            .setThumbnail('https://i.imgur.com/5IO5kPT.png')
             .addFields(info)
             .setTimestamp()
-            .setFooter({ text: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' });
+            .setFooter({ text: 'Shakaboom' });
 
         const selectItem = data?.map((item, index) => (
             new StringSelectMenuOptionBuilder()
@@ -187,29 +161,23 @@ module.exports = {
                     const exampleEmbed = new EmbedBuilder()
                         .setColor(0x0099FF)
                         .setTitle('補裝資訊 Info')
-                        .setAuthor({ name: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' })
+                        .setAuthor({ name: 'Shakaboom'})
                         .setDescription('已送出補裝資料 Complete')
-                        .setThumbnail('https://i.imgur.com/5IO5kPT.png')
                         .addFields(regearInfo)
                         .setTimestamp()
-                        .setFooter({ text: 'Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' });
+                        .setFooter({ text: 'Shakaboom' });
 
                     await interaction.editReply({ embeds: [exampleEmbed], ephemeral: true });
 
                     const target = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
 
-                    if (+tier === 8) {
-                        target.roles.remove(t8)
-                    }
-                    if (+tier === 9) {
-                        target.roles.remove(t9)
-                    }
+                    target.roles.remove(t8)
 
                     for (let index = 0; index < fields.length; index++) {
                         try {
                             await CreateRegearEventIdFunc(fields[index].customId)
 
-                            await pushData(fields[index].customId, remarkJsonObj, isFighter, tier)
+                            await pushData(fields[index].customId, remarkJsonObj, isFighter)
                         }
                         catch (error) {
                             if (error.name === 'SequelizeUniqueConstraintError') {
