@@ -66,7 +66,7 @@ const weaponNameParser = (data, dict, tier) => {
     }
 }
 
-module.exports = async (eventId, remarkJsonObj, isFighter, tier) => {
+module.exports = async (eventId, remarkJsonObj, isFighter) => {
 
     let res = [await fetch(APIbase[0] + eventId), await fetch(APIbase[1] + eventId)].filter(i => i.status === 200)[0];
     let data = await res.json();
@@ -87,8 +87,8 @@ module.exports = async (eventId, remarkJsonObj, isFighter, tier) => {
 
     let result = {
         name: victim["Name"],
-        weapon: weaponNameParser(equipment["MainHand"], dict, tier),
-        offHand: weaponNameParser(equipment["OffHand"], dict),
+        weapon: nameParser(equipment["MainHand"], dict),
+        offHand: nameParser(equipment["OffHand"], dict),
         head: nameParser(equipment["Head"], dict),
         armor: nameParser(equipment["Armor"], dict),
         shoes: nameParser(equipment["Shoes"], dict),

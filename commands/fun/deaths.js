@@ -34,7 +34,7 @@ module.exports = {
         const inGameName = interaction.options.getString('name');
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
-        const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Just Hold')
+        const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Shakaboom')
 
         if (!player) {
             await interaction.editReply({ content: '輸入的查詢名稱並未是JH之成員。', ephemeral: true });

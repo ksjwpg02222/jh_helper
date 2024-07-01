@@ -8,8 +8,8 @@ module.exports = {
     async execute(interaction) {
 
         if(process.env.MODE !== 'dev'){
-            if (!interaction.member._roles.some(role => role === '1210485354717782088')) {
-                await interaction.reply({ content: '尚無JH身分組，如果有的話請詢問管理員。', ephemeral: true });
+            if (!interaction.member._roles.some(role => role === '1255826930524225546')) {
+                await interaction.reply({ content: '尚無Shakaboom身分組，如果有的話請詢問管理員。', ephemeral: true });
                 return
             }
         }
