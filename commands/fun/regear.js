@@ -47,7 +47,7 @@ module.exports = {
         logger.info(`${inGameName}申請補裝`);
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
-        const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Shakaboom')
+        const player = playerInfo.players.find(data => data.Name === inGameName && (data.GuildName === 'Shakaboom' || data.GuildName === 'Just Hold'))
 
         if (!player) {
             await interaction.editReply({ content: '輸入的查詢名稱並未是Shakaboom之成員 \n Is Not Shakaboom Member', ephemeral: true });
@@ -161,7 +161,7 @@ module.exports = {
                     const exampleEmbed = new EmbedBuilder()
                         .setColor(0x0099FF)
                         .setTitle('補裝資訊 Info')
-                        .setAuthor({ name: 'Shakaboom'})
+                        .setAuthor({ name: 'Shakaboom' })
                         .setDescription('已送出補裝資料 Complete')
                         .addFields(regearInfo)
                         .setTimestamp()
