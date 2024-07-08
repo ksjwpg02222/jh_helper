@@ -42,7 +42,7 @@ const nameParser = (data, dict, isMount) => {
     else return `${T}${number.length ? "." + number : ""}${dict[id]}`;
 }
 
-const weaponNameParser = (data, dict, tier) => {
+const weaponNameParser = (data, dict) => {
     if (!data) return "無";
     let id = data["Type"];
     let T = id.split("_")[0];
@@ -57,10 +57,8 @@ const weaponNameParser = (data, dict, tier) => {
 
     const tierSum = +T.replace('T', "") + +number
 
-    if (+tier == 8 && tierSum > 8) {
+    if (tierSum > 8) {
         return `T6.2${dict[id]}`;
-    } else if (+tier == 9 && tierSum > 9) {
-        return `T6.3${dict[id]}`;
     } else {
         return `${T}${number.length ? "." + number : ""}${dict[id]}`;
     }
@@ -87,13 +85,13 @@ module.exports = async (eventId, remarkJsonObj, isFighter) => {
 
     let result = {
         name: victim["Name"],
-        weapon: nameParser(equipment["MainHand"], dict),
-        offHand: nameParser(equipment["OffHand"], dict),
-        head: nameParser(equipment["Head"], dict),
-        armor: nameParser(equipment["Armor"], dict),
-        shoes: nameParser(equipment["Shoes"], dict),
-        cape: nameParser(equipment["Cape"], dict),
-        mount: nameParser(equipment["Mount"], dict, true),
+        weapon: weaponNameParser(equipment["MainHand"], dict),
+        offHand: weaponNameParser(equipment["OffHand"], dict),
+        head: weaponNameParser(equipment["Head"], dict),
+        armor: weaponNameParser(equipment["Armor"], dict),
+        shoes: weaponNameParser(equipment["Shoes"], dict),
+        cape: weaponNameParser(equipment["Cape"], dict),
+        mount: weaponNameParser(equipment["Mount"], dict, true),
         time: `${date}.${month}.${year} ${hour}:${minute}`,
         eventId,
         isFighter: isFighter ? '是' : '否',
