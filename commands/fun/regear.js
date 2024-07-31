@@ -56,7 +56,7 @@ module.exports = {
 
         const { data: deaths } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/players/${player.Id}/deaths`)
 
-        const data = deaths.filter(death => new Date().getTime() - new Date(death.TimeStamp).getTime() < 172800000)
+        const data = deaths.filter(death => new Date().getTime() - new Date(death.TimeStamp).getTime() < 432000000)
 
         const info = data?.map((item, index) => ({
             name: `${index + 1}. [${item.Killer.GuildName}]${item.Killer.Name} 殺了 [${item.Victim.GuildName}]${item.Victim.Name}`,
