@@ -77,7 +77,7 @@ module.exports = {
                 )
                 .setTimestamp()
                 .setImage('https://i.imgur.com/3o59qVr.png')
-                .setFooter({ text: '有問題請私訊幹部.   Just Hold', iconURL: 'https://i.imgur.com/5IO5kPT.png' });
+                .setFooter({ text: '有問題請私訊幹部.', iconURL: 'https://i.imgur.com/5IO5kPT.png' });
 
 
             await interaction.editReply({ embeds: [exampleEmbed], ephemeral: true });
