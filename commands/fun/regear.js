@@ -31,7 +31,7 @@ module.exports = {
 
 
     async execute(interaction) {
-        const t8 = '1257304498775523409'
+        const t8 = '1290981353143271494'
 
         await interaction.deferReply({ ephemeral: true });
 
@@ -47,10 +47,10 @@ module.exports = {
         logger.info(`${inGameName}申請補裝`);
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
-        const player = playerInfo.players.find(data => data.Name === inGameName && (data.GuildName === 'Shakaboom' || data.GuildName === 'Just Hold'))
+        const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Once Upon a Time')
 
         if (!player) {
-            await interaction.editReply({ content: '輸入的查詢名稱並未是Shakaboom之成員 \n Is Not Shakaboom Member', ephemeral: true });
+            await interaction.editReply({ content: '輸入的查詢名稱並未是OUAT之成員', ephemeral: true });
             return
         }
 
@@ -66,11 +66,11 @@ module.exports = {
         const exampleEmbed = new EmbedBuilder()
             .setColor(0x0099FF)
             .setTitle(inGameName || '無資料 No Data')
-            .setAuthor({ name: 'Shakaboom' })
+            .setAuthor({ name: 'Once Upon a Time' })
             .setDescription('最近 "兩天內" 的死亡紀錄(新至舊，最多10筆)')
             .addFields(info)
             .setTimestamp()
-            .setFooter({ text: 'Shakaboom' });
+            .setFooter({ text: 'Once Upon a Time' });
 
         const selectItem = data?.map((item, index) => (
             new StringSelectMenuOptionBuilder()
@@ -161,11 +161,11 @@ module.exports = {
                     const exampleEmbed = new EmbedBuilder()
                         .setColor(0x0099FF)
                         .setTitle('補裝資訊 Info')
-                        .setAuthor({ name: 'Shakaboom' })
+                        .setAuthor({ name: 'Once Upon a Time'})
                         .setDescription('已送出補裝資料 Complete')
                         .addFields(regearInfo)
                         .setTimestamp()
-                        .setFooter({ text: 'Shakaboom' });
+                        .setFooter({ text: 'Once Upon a Time' });
 
                     await interaction.editReply({ embeds: [exampleEmbed], ephemeral: true });
 
