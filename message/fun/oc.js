@@ -298,7 +298,7 @@ module.exports = async (msg, attachments) => {
                                                         } else if (jsonObj.parts === '副手OFFHAND') {
                                                             prev.offHand = `${t?.replace('平', 'T')}${jsonObj.name}`
                                                         } else if (jsonObj.parts === '武器WEAPON') {
-                                                            prev.weapon = `${jsonObj.t?.replace('平', 'T')}${jsonObj.name}`
+                                                            prev.weapon = `${t?.replace('平', 'T')}${jsonObj.name}`
                                                         }
                                                         return { ...prev }
                                                     }, {})
