@@ -31,7 +31,7 @@ module.exports = {
 
 
     async execute(interaction) {
-        const t8 = '1290981353143271494'
+        // const t8 = '1290981353143271494'
 
         await interaction.deferReply({ ephemeral: true });
 
@@ -39,10 +39,10 @@ module.exports = {
         const isFighter = false
         const inGameName = interaction.options.getString('name');
 
-        if (!interaction.member._roles.some(role => role === t8)) {
-            interaction.editReply({ content: `並無T補裝資格，請洽詢教官索取補裝資格。`, ephemeral: true });
-            return
-        }
+        // if (!interaction.member._roles.some(role => role === t8)) {
+        //     interaction.editReply({ content: `並無T補裝資格，請洽詢教官索取補裝資格。`, ephemeral: true });
+        //     return
+        // }
 
         logger.info(`${inGameName}申請補裝`);
 
