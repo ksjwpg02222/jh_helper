@@ -169,9 +169,9 @@ module.exports = {
 
                     await interaction.editReply({ embeds: [exampleEmbed], ephemeral: true });
 
-                    const target = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
+                    // const target = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
 
-                    target.roles.remove(t8)
+                    // target.roles.remove(t8)
 
                     for (let index = 0; index < fields.length; index++) {
                         try {
