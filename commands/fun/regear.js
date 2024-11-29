@@ -122,7 +122,7 @@ module.exports = {
                             .setCustomId(`${item.EventId}`)
                             .setLabel(text)
                             .setStyle(TextInputStyle.Short)
-                            .setPlaceholder('備註必填 (時間、MASS類型、caller)')
+                            .setPlaceholder('備註必填 (日期、時間、mass類型、caller)')
                             .setRequired(true)
                     })
 
