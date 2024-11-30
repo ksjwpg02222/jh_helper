@@ -67,7 +67,7 @@ module.exports = {
             .setColor(0x0099FF)
             .setTitle(inGameName || '無資料 No Data')
             .setAuthor({ name: 'Once Upon a Time' })
-            .setDescription('最近 "兩天內" 的死亡紀錄(新至舊，最多10筆)')
+            .setDescription('最近 "五天內" 的死亡紀錄(新至舊，最多10筆)')
             .addFields(info)
             .setTimestamp()
             .setFooter({ text: 'Once Upon a Time' });
@@ -80,7 +80,7 @@ module.exports = {
         ))
 
         if (!selectItem.length) {
-            await interaction.editReply({ content: '近兩天內無任何死亡紀錄，若是近幾分鐘內有死亡的話請稍後再試。 \n No Data', ephemeral: true });
+            await interaction.editReply({ content: '近五天內無任何死亡紀錄，若是近幾分鐘內有死亡的話請稍後再試。 \n No Data', ephemeral: true });
             return
         }
 
