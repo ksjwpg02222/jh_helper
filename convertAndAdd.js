@@ -57,11 +57,14 @@ const weaponNameParser = (data, dict) => {
 
     const tierSum = +T.replace('T', "") + +number
 
-    if (tierSum > 8) {
-        return `T6.2${dict[id]}`;
-    } else {
-        return `${T}${number.length ? "." + number : ""}${dict[id]}`;
-    }
+    // 大於平8轉平8 目前無用
+    // if (tierSum > 8) {
+    //     return `T6.2${dict[id]}`;
+    // } else {
+    //     return `${T}${number.length ? "." + number : ""}${dict[id]}`;
+    // }
+
+    return `${T}${number.length ? "." + number : ""}${dict[id]}`;
 }
 
 module.exports = async (eventId, remarkJsonObj, isFighter) => {
