@@ -42,7 +42,7 @@ const nameParser = (data, dict, isMount) => {
     else return `${T}${number.length ? "." + number : ""}${dict[id]}`;
 }
 
-const weaponNameParser = (data, dict) => {
+const weaponNameParser = (data, dict, regerTier) => {
     if (!data) return "無";
     let id = data["Type"];
     let T = id.split("_")[0];
@@ -57,17 +57,47 @@ const weaponNameParser = (data, dict) => {
 
     const tierSum = +T.replace('T', "") + +number
 
-    // 大於平8轉平8 目前無用
-    // if (tierSum > 8) {
-    //     return `T6.2${dict[id]}`;
-    // } else {
-    //     return `${T}${number.length ? "." + number : ""}${dict[id]}`;
-    // }
+    if (regerTier == 8) {
+        if (tierSum > 8) {
+            return `T6.2${dict[id]}`;
+        } else {
+            return `${T}${number.length ? "." + number : ""}${dict[id]}`;
 
-    return `${T}${number.length ? "." + number : ""}${dict[id]}`;
+        }
+    } else if (regerTier == 9) {
+        if (tierSum > 9) {
+            return `T6.2${dict[id]}`;
+        } else {
+            return `${T}${number.length ? "." + number : ""}${dict[id]}`;
+        }
+    } else {
+        return `${T}${number.length ? "." + number : ""}${dict[id]}`;
+    }
 }
 
-module.exports = async (eventId, remarkJsonObj, isFighter) => {
+const bodyNameParser = (data, dict) => {
+    if (!data) return "無";
+    let id = data["Type"];
+    let T = id.split("_")[0];
+    let name, number;
+
+    name = id.split("@")[0];
+    number = id.split("@")[1];
+    if (number == undefined) {
+        number = "";
+    }
+    id = name.replace(`${T}_`, "");
+
+    const tierSum = +T.replace('T', "") + +number
+
+    if (tierSum > 8) {
+        return `T6.2${dict[id]}`;
+    } else {
+        return `${T}${number.length ? "." + number : ""}${dict[id]}`;
+    }
+}
+
+module.exports = async (eventId, remarkJsonObj, isFighter, regerTier) => {
 
     let res = [await fetch(APIbase[0] + eventId), await fetch(APIbase[1] + eventId)].filter(i => i.status === 200)[0];
     let data = await res.json();
@@ -88,13 +118,13 @@ module.exports = async (eventId, remarkJsonObj, isFighter) => {
 
     let result = {
         name: victim["Name"],
-        weapon: weaponNameParser(equipment["MainHand"], dict),
-        offHand: weaponNameParser(equipment["OffHand"], dict),
-        head: weaponNameParser(equipment["Head"], dict),
-        armor: weaponNameParser(equipment["Armor"], dict),
-        shoes: weaponNameParser(equipment["Shoes"], dict),
-        cape: weaponNameParser(equipment["Cape"], dict),
-        mount: weaponNameParser(equipment["Mount"], dict, true),
+        weapon: weaponNameParser(equipment["MainHand"], dict, regerTier),
+        offHand: weaponNameParser(equipment["OffHand"], dict, regerTier),
+        head: bodyNameParser(equipment["Head"], dict),
+        armor: bodyNameParser(equipment["Armor"], dict),
+        shoes: bodyNameParser(equipment["Shoes"], dict),
+        cape: bodyNameParser(equipment["Cape"], dict),
+        mount: bodyNameParser(equipment["Mount"], dict),
         time: `${date}.${month}.${year} ${hour}:${minute}`,
         eventId,
         isFighter: isFighter ? '是' : '否',

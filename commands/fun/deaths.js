@@ -34,12 +34,13 @@ module.exports = {
         const inGameName = interaction.options.getString('name');
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
-        const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'Once Upon a Time')
+        // const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === '補裝機器人')
+        const player = playerInfo.players.find(data => data.Name === inGameName)
 
-        if (!player) {
-            await interaction.editReply({ content: '輸入的查詢名稱並未是JH之成員。', ephemeral: true });
-            return
-        }
+        // if (!player) {
+        //     await interaction.editReply({ content: '輸入的查詢名稱並未是JH之成員。', ephemeral: true });
+        //     return
+        // }
 
         const { data } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/players/${player.Id}/deaths`)
 

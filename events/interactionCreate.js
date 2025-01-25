@@ -7,12 +7,12 @@ module.exports = {
     name: Events.InteractionCreate,
     async execute(interaction) {
 
-        if(process.env.MODE !== 'dev'){
-            if (!interaction.member._roles.some(role => role === '1249408417953480878')) {
-                await interaction.reply({ content: '尚無Once Upon a Time身分組，如果有的話請詢問管理員。', ephemeral: true });
-                return
-            }
-        }
+        // if(process.env.MODE !== 'dev'){
+        //     if (!interaction.member._roles.some(role => role === '1249408417953480878')) {
+        //         await interaction.reply({ content: '尚無補裝機器人身分組，如果有的話請詢問管理員。', ephemeral: true });
+        //         return
+        //     }
+        // }
 
         if (!interaction.isChatInputCommand()) return;
 

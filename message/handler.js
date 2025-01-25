@@ -9,7 +9,7 @@ module.exports = (msg) => {
 
 
     if (attachments.length) {
-        if ((process.env.MODE === 'dev' && msg.channelId == '1010966927130251264') || msg.channelId == '1292335759717564466') {
+        if ((process.env.MODE === 'dev' && msg.channelId == '1010966927130251264') || msg.channelId == '1332718620937289810') {
             oc(msg, attachments)
         }
     }
