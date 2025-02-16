@@ -60,7 +60,7 @@ module.exports = {
             removeId = fullReger
         }
 
-        if(!regerTier){
+        if (!regerTier) {
             await interaction.editReply({ content: '無補裝身分組', ephemeral: true });
             return
         }
@@ -68,8 +68,8 @@ module.exports = {
         logger.info(`${inGameName}申請補裝`);
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
-        // const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === '補裝機器人')
-        const player = playerInfo.players.find(data => data.Name === inGameName)
+        const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'VlRUS')
+        // const player = playerInfo.players.find(data => data.Name === inGameName)
 
         if (!player) {
             await interaction.editReply({ content: '查無輸入的查詢名稱成員', ephemeral: true });
