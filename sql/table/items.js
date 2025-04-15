@@ -1,7 +1,6 @@
 const { Sequelize } = require('sequelize');
 const sequelize = require("../connect.js")
-const spreadSheetsId = '1m56QTu-G-Pf63wkSNmAcFdLiWdW9eF7kzf-H-Q2d2So'
-const sheetId = '10126847'
+const config = require("../../config/index.js")
 const credentials = '../../credentials.json'
 const { GoogleSpreadsheet } = require('google-spreadsheet')
 
@@ -41,11 +40,11 @@ const initData = async () => {
 }
 
 async function getData() {
-    const doc = new GoogleSpreadsheet(spreadSheetsId);
+    const doc = new GoogleSpreadsheet(config.SPREAD_SHEETS_ID);
     const creds = require(credentials);
     await doc.useServiceAccountAuth(creds);
     await doc.loadInfo();
-    const sheet = doc.sheetsById[sheetId];
+    const sheet = doc.sheetsById[config.SHEET_ID];
     const rows = await sheet.getRows();
     let result = [];
     for (row of rows) {

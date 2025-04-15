@@ -3,6 +3,7 @@ const { RegearEventIds } = require("../sql/table/regearEventIds.js")
 const { Item, itemCount, initData } = require("../sql/table/items.js")
 const logger = require('../logger.js');
 const CronJob = require('cron').CronJob;
+const config = require('../config/index.js')
 
 module.exports = {
     name: Events.ClientReady,
@@ -17,6 +18,7 @@ module.exports = {
 
             }
         })
+        console.log(config.MODE)
         logger.info('Ready!');
 
 

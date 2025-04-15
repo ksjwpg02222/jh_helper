@@ -1,9 +1,8 @@
 const AsyncLock = require('async-lock');
 const fetch = require("node-fetch");
+const config = require('./config/index.js')
 
 let lock = new AsyncLock({ domainReentrant: true });
-
-const appUrl = 'https://script.google.com/macros/s/AKfycbw8AVM4-hdDgdzTGPCoRQ_L4hOjanZqCN2wDZLi1-kH7pflBXd9DbjCapgDzn8syZHlIg/exec'
 
 module.exports = async (jsonObj) => {
 
@@ -32,7 +31,7 @@ module.exports = async (jsonObj) => {
     }
 
     await lock.acquire('key', async () => {
-        await fetch(appUrl, {
+        await fetch(config.OC_URL, {
             "method": "POST",
             "Content-Type": "application/json",
             "body": JSON.stringify(result)
