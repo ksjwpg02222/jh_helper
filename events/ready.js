@@ -18,7 +18,6 @@ module.exports = {
 
             }
         })
-        console.log(config.MODE)
         logger.info('Ready!');
 
 
