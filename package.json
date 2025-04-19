@@ -19,10 +19,11 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "node .",
+    "ouat": "node . ouat",
+    "vlrus": "node . vlrus",
     "build": "node commands",
     "lint": "eslint .",
-    "dev": "node -r dotenv/config . dotenv_config_path=./.env.dev | pino-pretty -i 5566,localhost -t 'yyyy-mm-dd HH:MM:ss'",
+    "dev": "node -r dotenv/config . dev dotenv_config_path=./.env.dev | pino-pretty -i 5566,localhost -t 'yyyy-mm-dd HH:MM:ss'",
     "cmd": "node commands.js | pino-pretty -i 5566,localhost -t 'yyyy-mm-dd HH:MM:ss'"
   }
 }

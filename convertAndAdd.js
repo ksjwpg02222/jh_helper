@@ -1,9 +1,8 @@
 const AsyncLock = require('async-lock');
 const fetch = require("node-fetch");
+const config = require("./config/index")
 
 let lock = new AsyncLock({ domainReentrant: true });
-
-const appUrl = 'https://script.google.com/macros/s/AKfycbyIUY096UOuZ42TbJzwffdli3QVS1yIhWKvFe-HrOBWJRpD_LeFZt3mn4ahfNsArhh7/exec'
 
 const APIbase = [
     "https://gameinfo-sgp.albiononline.com/api/gameinfo/events/",
@@ -11,7 +10,7 @@ const APIbase = [
 ];
 
 const getDict = async () => {
-    let res = await fetch("https://script.google.com/macros/s/AKfycbxEwEUvD0X6ntSEQRAnR8XLD1FhplCgwN_x59AJIF5UsP9FWJUTUaXlbQZnZOFhShWacw/exec");
+    let res = await fetch(config.DISC_URL);
     return res.json();
 }
 
@@ -132,7 +131,7 @@ module.exports = async (eventId, remarkJsonObj, isFighter, regerTier) => {
     }
 
     await lock.acquire('key', async () => {
-        await fetch(appUrl, {
+        await fetch(config.ADD_URL, {
             "method": "POST",
             "Content-Type": "application/json",
             "body": JSON.stringify(result)

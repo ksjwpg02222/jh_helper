@@ -3,6 +3,7 @@ const { default: axios } = require("axios");
 const pushData = require("../../convertAndAdd.js")
 const { CreateRegearEventIdFunc } = require('../../sql/table/regearEventIds.js');
 const logger = require('../../logger.js');
+const config = require('../../config/index.js')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -31,10 +32,6 @@ module.exports = {
 
 
     async execute(interaction) {
-        const t8 = '1332344637972680714'
-        const t9 = '1332344706717188147'
-        const fullReger = '1332344859683459193'
-
         let removeId;
 
         let regerTier;
@@ -45,20 +42,20 @@ module.exports = {
         const isFighter = false
         const inGameName = interaction.options.getString('name');
 
-        if (interaction.member._roles.some(role => role === t8)) {
+        if (interaction.member._roles.some(role => role === config.T8_TAG_ID)) {
             regerTier = 8
-            removeId = t8
+            removeId = config.T8_TAG_ID
         }
 
-        if (interaction.member._roles.some(role => role === t9)) {
+        if (interaction.member._roles.some(role => role === config.T9_TAG_ID)) {
             regerTier = 9
-            removeId = t9
+            removeId = config.T9_TAG_ID
         }
 
-        if (interaction.member._roles.some(role => role === fullReger)) {
-            regerTier = 11
-            removeId = fullReger
-        }
+        // if (interaction.member._roles.some(role => role === config.FULL_TAG_ID)) {
+        //     regerTier = 11
+        //     removeId = config.FULL_TAG_ID
+        // }
 
         if (!regerTier) {
             await interaction.editReply({ content: '無補裝身分組', ephemeral: true });
@@ -68,7 +65,7 @@ module.exports = {
         logger.info(`${inGameName}申請補裝`);
 
         const { data: playerInfo } = await axios.get(`https://gameinfo-sgp.albiononline.com/api/gameinfo/search?q=${inGameName}`)
-        const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === 'VlRUS')
+        const player = playerInfo.players.find(data => data.Name === inGameName && data.GuildName === config.GUILD_NAME)
         // const player = playerInfo.players.find(data => data.Name === inGameName)
 
         if (!player) {
