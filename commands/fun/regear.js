@@ -52,10 +52,10 @@ module.exports = {
             removeId = config.T9_TAG_ID
         }
 
-        if (interaction.member._roles.some(role => role === config.FULL_TAG_ID)) {
-            regerTier = 11
-            removeId = config.FULL_TAG_ID
-        }
+        // if (interaction.member._roles.some(role => role === config.FULL_TAG_ID)) {
+        //     regerTier = 11
+        //     removeId = config.FULL_TAG_ID
+        // }
 
         if (!regerTier) {
             await interaction.editReply({ content: '無補裝身分組', ephemeral: true });
