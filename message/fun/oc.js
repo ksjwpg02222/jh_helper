@@ -289,11 +289,11 @@ module.exports = async (msg, attachments) => {
                                                         }
 
                                                         if (jsonObj.parts === '頭HEAD') {
-                                                            prev.head = `${t?.replace('平', 'T')}${jsonObj.name}`
+                                                            prev.head = `平8$${jsonObj.name}`
                                                         } else if (jsonObj.parts === '身BODY') {
-                                                            prev.armor = `${t?.replace('平', 'T')}${jsonObj.name}`
+                                                            prev.armor = `平8$${jsonObj.name}`
                                                         } else if (jsonObj.parts === '腳LEG') {
-                                                            prev.shoes = `${t?.replace('平', 'T')}${jsonObj.name}`
+                                                            prev.shoes = `平8$${jsonObj.name}`
                                                         } else if (jsonObj.parts === '副手OFFHAND') {
                                                             prev.offHand = `${t?.replace('平', 'T')}${jsonObj.name}`
                                                         } else if (jsonObj.parts === '武器WEAPON') {
