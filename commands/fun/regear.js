@@ -49,7 +49,6 @@ module.exports = {
 
         if (interaction.member._roles.some(role => role === config.T9_TAG_ID)) {
             regerTier = 9
-            removeId = config.T9_TAG_ID
         }
 
         // if (interaction.member._roles.some(role => role === config.FULL_TAG_ID)) {
@@ -190,7 +189,9 @@ module.exports = {
 
                     const target = interaction.guild.members.cache.find(member => member.id === interaction.user.id)
 
-                    target.roles.remove(removeId)
+                    if (removeId) {
+                        target.roles.remove(removeId)
+                    }
 
                     for (let index = 0; index < fields.length; index++) {
                         try {
