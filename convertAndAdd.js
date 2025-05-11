@@ -64,10 +64,10 @@ const weaponNameParser = (data, dict, regerTier) => {
 
         }
     } else if (regerTier == 9) {
-        if (tierSum > 9) {
-            return `T6.2${dict[id]}`;
-        } else {
+        if (tierSum < 9) {
             return `${T}${number.length ? "." + number : ""}${dict[id]}`;
+        } else {
+            return `T6.3${dict[id]}`;
         }
     } else {
         return `${T}${number.length ? "." + number : ""}${dict[id]}`;
